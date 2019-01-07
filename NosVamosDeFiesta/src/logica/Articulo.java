@@ -8,12 +8,15 @@ public class Articulo {
 	private TipoArticulo tipo;
 	private String denominacion;
 	private String descripcion;
-	private double precioUnidad;
-	private double precioGrupo;
+	private float precioUnidad;
+	private float precioGrupo;
 	private String foto;
 	
-	public Articulo(String codigo, TipoArticulo tipo, String denominacion, String descripcion, double precioUnidad,
-			double precioGrupo) {
+	private int unidades;
+	private boolean grupo;
+	
+	public Articulo(String codigo, TipoArticulo tipo, String denominacion, String descripcion, float precioUnidad,
+			float precioGrupo) {
 		super();
 		this.codigo = codigo;
 		this.tipo = tipo;
@@ -39,13 +42,14 @@ public class Articulo {
 		this.tipo = tipo;
 	}
 
-	public String getNombre() {
+	public String getDenominacion() {
 		return denominacion;
 	}
 
-	public void setNombre(String nombre) {
-		this.denominacion = nombre;
+	public void setDenominacion(String denominacion) {
+		this.denominacion = denominacion;
 	}
+
 
 	public String getDescripcion() {
 		return descripcion;
@@ -55,19 +59,19 @@ public class Articulo {
 		this.descripcion = descripcion;
 	}
 
-	public double getPrecioUnidad() {
+	public float getPrecioUnidad() {
 		return precioUnidad;
 	}
 
-	public void setPrecioUnidad(double precioUnidad) {
+	public void setPrecioUnidad(float precioUnidad) {
 		this.precioUnidad = precioUnidad;
 	}
 
-	public double getPrecioGrupo() {
+	public float getPrecioGrupo() {
 		return precioGrupo;
 	}
 
-	public void setPrecioGrupo(double precioGrupo) {
+	public void setPrecioGrupo(float precioGrupo) {
 		this.precioGrupo = precioGrupo;
 	}
 
@@ -79,10 +83,32 @@ public class Articulo {
 		this.foto = foto;
 	}
 
+	public int getUnidades() {
+		return unidades;
+	}
+
+	public void setUnidades(int unidades) {
+		this.unidades = unidades;
+	}
+
+	public boolean isGrupo() {
+		return grupo;
+	}
+
+	public void setGrupo(boolean grupo) {
+		this.grupo = grupo;
+	}
+
 	@Override
 	public String toString() {
 		return "Articulo [codigo=" + codigo + ", tipo=" + tipo + ", nombre=" + denominacion + ", descripcion=" + descripcion
 				+ ", precioUnidad=" + precioUnidad + ", precioGrupo=" + precioGrupo + ", foto=" + foto + "]";
+	}
+
+	public float getImporte(int numPersonas) {
+		if (isGrupo())
+			return precioGrupo * numPersonas;
+		return precioUnidad * unidades;
 	}
 	
 }

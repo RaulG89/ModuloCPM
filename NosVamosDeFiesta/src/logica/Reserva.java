@@ -97,6 +97,14 @@ public class Reserva {
 		this.articulos = articulos;
 	}
 
+	public float calcularImporte() {
+		float importe = 0;
+		for (Articulo a : articulos){
+			importe += a.getImporte(numPersonas);
+		}	
+		return importe;
+	}
+		
 	@Override
 	public String toString() {
 		return "Reserva [tipoFiesta=" + tipoFiesta + ", descripcion=" + descripcion + ", numPersonas=" + numPersonas

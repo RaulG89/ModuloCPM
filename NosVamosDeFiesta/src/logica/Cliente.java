@@ -1,13 +1,13 @@
 package logica;
 
-public class Usuario {
+public class Cliente {
 
 	private String nombre;
 	private String contraseña;
 	
-	public Usuario() { }
+	public Cliente() { }
 
-	public Usuario(String nombre, String contraseña) {
+	public Cliente(String nombre, String contraseña) {
 		super();
 		this.nombre = nombre;
 		this.contraseña = contraseña;

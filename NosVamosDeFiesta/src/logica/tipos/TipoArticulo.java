@@ -1,9 +1,9 @@
 package logica.tipos;
 
 public enum TipoArticulo {
-	BEBIDA,
-	COMIDA,
-	DECORACION,
-	LOCAL,
-	OTROS
+	Bebida,
+	Comida,
+	Decoración,
+	Local,
+	Otros
 }
