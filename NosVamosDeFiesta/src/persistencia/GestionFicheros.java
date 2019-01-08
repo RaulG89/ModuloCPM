@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -89,16 +90,23 @@ public class GestionFicheros {
 
 	}
 	
-	public static void guardarFactura(Reserva reserva) {
-		try {
-			bw = new BufferedWriter(new FileWriter("" + reserva.getNif() + reserva.getFecha()));
-			bw.newLine();
-			bw.write(reserva.toString());
-			bw.close();
-		} catch (IOException e) {
-			new RuntimeException("Error de entrada/salida con el fichero de reserva.");
-		}
+	@SuppressWarnings("deprecation")
+	public static void guardarFactura(Reserva reserva) throws IOException {
+		Date fecha = new Date();
+        BufferedWriter fichero = new BufferedWriter(new FileWriter("files/" + reserva.getTelefono() + "-"
+                + fecha.getDate() + "-" + (fecha.getMonth() + 1) + "-" + (fecha.getYear() + 1900) + "-"
+                + fecha.getHours() + "-" + fecha.getMinutes() + "-" + fecha.getSeconds() + ".txt"));
+        try {
+            String linea = reserva.toString();
+            fichero.write(linea);
+        } catch (FileNotFoundException fnfe) {
+            System.out.println("El archivo no se ha podido guardar");
+        } catch (IOException ioe) {
+            new RuntimeException("Error de entrada/salida.");
+        }
+        fichero.close();
 	}
-
 	
+
+		
 }

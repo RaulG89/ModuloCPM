@@ -13,9 +13,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -33,7 +31,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SpinnerDateModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
@@ -202,7 +199,6 @@ public class VentanaPrincipal extends JFrame {
 	private JButton button_1;
 	private Component horizontalStrut_11;
 	private Component horizontalStrut_12;
-	private Component horizontalStrut_13;
 	private JButton btnAtrasResumen;
 	private JButton btnSiguienteResumen;
 	private JButton btnCancelarResumen;
@@ -238,6 +234,10 @@ public class VentanaPrincipal extends JFrame {
 	private JSpinner spinnerMinutos;
 	private Component horizontalStrut_19;
 	private Component horizontalStrut_20;
+	private JButton btnImprimirFactura;
+	private JPanel panelTelefono;
+	private JLabel lblTelefono;
+	private JTextField txtTelefono;
 	
 
 	/**
@@ -380,7 +380,8 @@ public class VentanaPrincipal extends JFrame {
 			btnIdentificate = new JButton("Identif\u00EDcate");
 			btnIdentificate.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					identificacionCliente();
+					if(validarFormularioIdentificacion())
+						identificacionCliente();
 				}
 			});
 			btnIdentificate.setMnemonic('D');
@@ -388,12 +389,25 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return btnIdentificate;
 	}
+	
+	private boolean validarFormularioIdentificacion() {
+		if (!txtNombreIdentificacion.getText().equals("") 
+				&& !pwIdentificacion.getText().equals("")){
+			return true;
+		}
+		JOptionPane.showMessageDialog(this, "No puede haber campos vacíos. Rellénelos para continuar.");
+		txtNombreIdentificacion.setText("");
+		pwIdentificacion.setText("");
+		return false;
+	}
+	
 	private JButton getBtnRegistrate() {
 		if (btnRegistrate == null) {
 			btnRegistrate = new JButton("Reg\u00EDstrate");
 			btnRegistrate.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					registroCliente();
+					if(validarFormularioRegistro())
+						registroCliente();
 				}
 			});
 			btnRegistrate.setMnemonic('R');
@@ -401,6 +415,18 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return btnRegistrate;
 	}
+	
+	private boolean validarFormularioRegistro() {
+		if (!txtNombreRegistro.getText().equals("") 
+				&& !pwRegistro.getText().equals("")){
+			return true;
+		}
+		JOptionPane.showMessageDialog(this, "No puede haber campos vacíos. Rellénelos para continuar.");
+		txtNombreRegistro.setText("");
+		pwRegistro.setText("");
+		return false;
+	}
+	
 	private JButton getBtnSinRegistro() {
 		if (btnSinRegistro == null) {
 			btnSinRegistro = new JButton("Continuar sin registro");
@@ -743,8 +769,7 @@ public class VentanaPrincipal extends JFrame {
 			btnCancelar = new JButton("Cancelar");
 			btnCancelar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					cambiarPanel(true, false, false, false, false, false, false);
-					inicializar();
+					reiniciarAplicacion();
 				}
 			});
 			btnCancelar.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -757,13 +782,12 @@ public class VentanaPrincipal extends JFrame {
 			btnSiguiente = new JButton("Siguiente");
 			btnSiguiente.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					organizacionFiestas.configurarReserva(
-							txtTipoFiestaConfiguracion.getText(),
-							textAreaDescripcionConfiguracion.getText(),
-							(int) spinnerConfiguracion.getValue()
-							);
-					inicializarCatalogo();
-					cambiarPanel(false, false, false, true, false, false, false);
+					if (validarFormularioInicio()) {
+						organizacionFiestas.configurarReserva(txtTipoFiestaConfiguracion.getText(),
+								textAreaDescripcionConfiguracion.getText(), (int) spinnerConfiguracion.getValue());
+						inicializarCatalogo();
+						cambiarPanel(false, false, false, true, false, false, false);
+					}
 				}
 			});
 			btnSiguiente.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -771,6 +795,16 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return btnSiguiente;
 	}
+	
+	private boolean validarFormularioInicio(){
+		if (!txtTipoFiestaConfiguracion.getText().equals("") 
+				&& !textAreaDescripcionConfiguracion.getText().equals("")){
+			return true;
+		}
+		JOptionPane.showMessageDialog(this, "No puede haber campos vacíos. Rellénelos para continuar.");
+		return false;
+	}
+	
 	private JPanel getPanelTituloConfiguracion() {
 		if (panelTituloConfiguracion == null) {
 			panelTituloConfiguracion = new JPanel();
@@ -1165,6 +1199,11 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnCancelarCatalogo() {
 		if (btnCancelarCatalogo == null) {
 			btnCancelarCatalogo = new JButton("Cancelar");
+			btnCancelarCatalogo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					reiniciarAplicacion();
+				}
+			});
 			btnCancelarCatalogo.setFont(new Font("Tahoma", Font.PLAIN, 18));
 			btnCancelarCatalogo.setMnemonic('C');
 		}
@@ -1295,6 +1334,7 @@ public class VentanaPrincipal extends JFrame {
 			btnSiguienteFormalizacion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(validarFormularioFormalizacion()) {
+						textAreaResumen.setText(organizacionFiestas.getReserva().toString());
 						cambiarPanel(false, false, false, false, false, true, false);
 					}
 				}
@@ -1305,16 +1345,16 @@ public class VentanaPrincipal extends JFrame {
 		return btnSiguienteFormalizacion;
 	}
 	
+	@SuppressWarnings("deprecation")
 	private boolean validarFormularioFormalizacion(){
-		String cadenaFecha = "" + spinnerDia.getValue() + "-" + spinnerMes.getValue() + "-" + spinnerAño.getValue();
-		Date fecha = null;
-		try {
-			fecha = dateConverter.stringToDate(cadenaFecha);
-		} catch (ParseException e) {
-			JOptionPane.showMessageDialog(this, "La fecha indicada no es valida.");
-		}
+		Date fecha = new Date((int) spinnerAño.getValue(), 
+				(int) spinnerMes.getValue(), 
+				(int) spinnerDia.getValue(), 
+				(int) spinnerHora.getValue(), 
+				(int) spinnerMinutos.getValue()) ;
+
 		if (txtNombreFormalizacion.getText().equals("") || txtApellidosFormalizacion.getText().equals("")
-				|| txtNif.getText().equals("") || txtObservaciones.getText().equals("")) {
+				|| txtNif.getText().equals("") || txtObservaciones.getText().equals("") || txtTelefono.getText().equals("")) {
 			JOptionPane.showMessageDialog(this, "No se pueden dejar campos en blanco.");
 			return false;
 		}
@@ -1326,11 +1366,18 @@ public class VentanaPrincipal extends JFrame {
 		organizacionFiestas.getReserva().setApellidos(txtApellidosFormalizacion.getText());
 		organizacionFiestas.getReserva().setNif(txtNif.getText());
 		organizacionFiestas.getReserva().setFecha(fecha);
+		organizacionFiestas.getReserva().setObservacion(txtObservaciones.getText());
+		organizacionFiestas.getReserva().setTelefono(txtTelefono.getText());
 		return true;
 	}
 	private JButton getBtnCancelarFormalizacion() {
 		if (btnCancelarFormalizacion == null) {
 			btnCancelarFormalizacion = new JButton("Cancelar");
+			btnCancelarFormalizacion.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					reiniciarAplicacion();
+				}
+			});
 			btnCancelarFormalizacion.setFont(new Font("Tahoma", Font.PLAIN, 18));
 			btnCancelarFormalizacion.setMnemonic('C');
 		}
@@ -1417,6 +1464,7 @@ public class VentanaPrincipal extends JFrame {
 			panelDatosPersonales.add(getPanelNombre());
 			panelDatosPersonales.add(getPanelApellidos());
 			panelDatosPersonales.add(getPanelNif());
+			panelDatosPersonales.add(getPanelTelefono());
 			panelDatosPersonales.add(getVerticalStrut_13());
 		}
 		return panelDatosPersonales;
@@ -1709,7 +1757,7 @@ public class VentanaPrincipal extends JFrame {
 			panelSuperiorResumen.add(getButton_1());
 			panelSuperiorResumen.add(getHorizontalStrut_11());
 			panelSuperiorResumen.add(getHorizontalStrut_12());
-			panelSuperiorResumen.add(getHorizontalStrut_13());
+			panelSuperiorResumen.add(getBtnImprimirFactura());
 		}
 		return panelSuperiorResumen;
 	}
@@ -1751,12 +1799,6 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return horizontalStrut_12;
 	}
-	private Component getHorizontalStrut_13() {
-		if (horizontalStrut_13 == null) {
-			horizontalStrut_13 = Box.createHorizontalStrut(20);
-		}
-		return horizontalStrut_13;
-	}
 	private JButton getBtnAtrasResumen() {
 		if (btnAtrasResumen == null) {
 			btnAtrasResumen = new JButton("Atras");
@@ -1786,6 +1828,11 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnCancelarResumen() {
 		if (btnCancelarResumen == null) {
 			btnCancelarResumen = new JButton("Cancelar");
+			btnCancelarResumen.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					reiniciarAplicacion();
+				}
+			});
 			btnCancelarResumen.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		}
 		return btnCancelarResumen;
@@ -1916,7 +1963,7 @@ public class VentanaPrincipal extends JFrame {
 			btnFinalizar = new JButton("Finalizar");
 			btnFinalizar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					cambiarPanel(true, false, false, false, false, false, false);
+					reiniciarAplicacion();
 				}
 			});
 			btnFinalizar.setBackground(new Color(255, 204, 51));
@@ -1959,7 +2006,7 @@ public class VentanaPrincipal extends JFrame {
 	}
 	
 	private void inicializar(){
-		//Aquí inicializamos
+		organizacionFiestas.inicializar();
 	}
 	
 	private void identificacionCliente(){
@@ -1991,9 +2038,14 @@ public class VentanaPrincipal extends JFrame {
 		lblNombreClienteFormalizacion.setText(organizacionFiestas.getReserva().getCliente().getNombre());
 	}
 	
+	private void desconfigurarNombreCliente(){
+		lblNombreClienteConfiguracion.setText("");
+		lblNombreClienteCatalogo.setText("");
+		lblNombreClienteFormalizacion.setText("");
+	}
+	
 	private void inicializarCatalogo() {
 		Map<String, Articulo> articulos = organizacionFiestas.getArticulos();
-		PanelArticuloCatalogo panel = null;
 		for(Articulo a : articulos.values()){
 			añadirArticuloPanelCatalogo(a);
 		}
@@ -2059,6 +2111,13 @@ public class VentanaPrincipal extends JFrame {
 	public void recuperarCarrito() {
 		organizacionFiestas.recuperarCarrito();
 	}
+	
+	private void reiniciarAplicacion(){
+		inicializar();
+		desconfigurarNombreCliente();
+		cambiarPanel(true, false, false, false, false, false, false);
+	}
+	
 	private Component getHorizontalStrut_19() {
 		if (horizontalStrut_19 == null) {
 			horizontalStrut_19 = Box.createHorizontalStrut(20);
@@ -2070,5 +2129,48 @@ public class VentanaPrincipal extends JFrame {
 			horizontalStrut_20 = Box.createHorizontalStrut(20);
 		}
 		return horizontalStrut_20;
+	}
+	private JButton getBtnImprimirFactura() {
+		if (btnImprimirFactura == null) {
+			btnImprimirFactura = new JButton("Imprimir Factura");
+			btnImprimirFactura.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					imprimirFactura();
+				}
+			});
+			btnImprimirFactura.setMnemonic('M');
+		}
+		return btnImprimirFactura;
+	}
+	
+	private void imprimirFactura(){
+		organizacionFiestas.imprimirFactura();
+		JOptionPane.showMessageDialog(this, "Factura impresa!");
+	}
+	private JPanel getPanelTelefono() {
+		if (panelTelefono == null) {
+			panelTelefono = new JPanel();
+			panelTelefono.setLayout(new GridLayout(0, 2, 0, 0));
+			panelTelefono.add(getLblTelefono());
+			panelTelefono.add(getTxtTelefono());
+		}
+		return panelTelefono;
+	}
+	private JLabel getLblTelefono() {
+		if (lblTelefono == null) {
+			lblTelefono = new JLabel("Tel\u00E9fono: ");
+			lblTelefono.setLabelFor(getTxtTelefono());
+			lblTelefono.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			lblTelefono.setDisplayedMnemonic('E');
+		}
+		return lblTelefono;
+	}
+	private JTextField getTxtTelefono() {
+		if (txtTelefono == null) {
+			txtTelefono = new JTextField();
+			txtTelefono.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			txtTelefono.setColumns(10);
+		}
+		return txtTelefono;
 	}
 }

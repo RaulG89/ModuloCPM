@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import logica.tipos.TipoArticulo;
+
 public class Reserva {
 
 	private Cliente cliente;
@@ -15,6 +17,7 @@ public class Reserva {
 	private String nif;
 	private Date fecha;
 	private String observacion;
+	private String telefono;
 
 	private List<Articulo> articulos = new ArrayList<Articulo>();
 	private List<Articulo> articulosRecuperar = new ArrayList<Articulo>();
@@ -121,6 +124,14 @@ public class Reserva {
 		this.articulosRecuperar = articulosRecuperar;
 	}
 
+	public String getTelefono() {
+		return telefono;
+	}
+
+	public void setTelefono(String telefono) {
+		this.telefono = telefono;
+	}
+
 	public float calcularImporte() {
 		float importe = 0;
 		for (Articulo a : articulos){
@@ -129,11 +140,60 @@ public class Reserva {
 		return importe;
 	}
 		
+	@SuppressWarnings("deprecation")
 	@Override
 	public String toString() {
-		return "Reserva [tipoFiesta=" + tipoFiesta + ", descripcion=" + descripcion + ", numPersonas=" + numPersonas
-				+ ", nombre=" + nombre + ", apellidos=" + apellidos + ", nif=" + nif + ", fecha=" + fecha
-				+ ", observacion=" + observacion + ", articulos=" + articulos + "]";
+		String fechaFiesta = "" + fecha.getDate() + "/"
+				+ (fecha.getMonth()) + "/"
+				+ (fecha.getYear());
+		String bebidas = "Bebida:\n";
+		String comidas = "Comida:\n";
+		String decoraciones = "Decoración:\n";
+		String locales = "Local:\n";
+		String otros = "Otros:\n";
+		
+		for(Articulo a: articulos){
+			if(a.getTipo().equals(TipoArticulo.Bebida))
+				bebidas += "* " + a.getDenominacion() + " / " + a.getCodigo() + " / " + a.getUnidades() + " / " + a.getImporte(numPersonas) + "\n";
+			if(a.getTipo().equals(TipoArticulo.Comida))
+				comidas += "* " + a.getDenominacion() + " / " + a.getCodigo() + " / " + a.getUnidades() + " / " + a.getImporte(numPersonas) + "\n";
+			if(a.getTipo().equals(TipoArticulo.Decoración))
+				decoraciones += "* " + a.getDenominacion() + " / " + a.getCodigo() + " / " + a.getUnidades() + " / " + a.getImporte(numPersonas) + "\n";
+			if(a.getTipo().equals(TipoArticulo.Local))
+				locales += "* " + a.getDenominacion() + " / " + a.getCodigo() + " / " + a.getUnidades() + " / " + a.getImporte(numPersonas)+ "\n";
+			if(a.getTipo().equals(TipoArticulo.Otros))
+				otros += "* " + a.getDenominacion() + " / " + a.getCodigo() + " / " + a.getUnidades() + " / " + a.getImporte(numPersonas)+ "\n";
+		}
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("FACTURA FIESTA\n");
+		sb.append("--------------\n");
+		sb.append("** CLIENTE: " + nombre + " " + apellidos + " ");
+		if(cliente != null)
+			sb.append("(CLIENTE REGISTRADO: " + cliente.getNombre() + ")");
+		sb.append("\n");
+		sb.append("** NIF: " + nif + "\n");
+		sb.append("** FECHA Y HORA FIESTA: " + fechaFiesta + " a las " + fecha.getHours() + ":" + fecha.getMinutes() + "\n");
+		sb.append("** NUMERO PERSONAS: " + numPersonas + "\n");
+		sb.append("\n");
+		sb.append("RELACIÓN ARTÍCULOS: DENOMINACIÓN / CÓDIGO / UNIDADES / TOTAL ARTÍCULO\n");
+		sb.append("----------------------------------------------------------------------\n");
+		sb.append(bebidas);
+		sb.append(comidas);
+		sb.append(decoraciones);
+		sb.append(locales);
+		sb.append(otros);
+		sb.append("\n");
+		sb.append("OBSERVACIONES\n");
+		sb.append("-------------\n");
+		sb.append("" + observacion + "\n");
+		sb.append("\n");
+		if(cliente != null)
+			sb.append("TOTAL FACTURA CON DESCUENTO CLIENTE: " + calcularImporte() + " – (15% de "+ calcularImporte() +") = " + calcularImporte() * 0.85 +" €\n");
+		else
+			sb.append("TOTAL FACTURA: " + calcularImporte() + " €\n");
+		
+		return sb.toString();
 	}
 
 	public void añadirArticulo(Articulo articulo) {

@@ -1,5 +1,6 @@
 package logica;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -10,10 +11,12 @@ public class OrganizacionFiestas {
 	private Reserva reserva;
 	private HashMap<String, Articulo> articulos;
 	private HashMap<String, Cliente> clientes;
+	private boolean descuento;
 	
 	public OrganizacionFiestas() {
 		articulos = GestionFicheros.cargarArticulos();
 		clientes = GestionFicheros.cargarClientes();
+		descuento= false;
 	}
 	
 	public Reserva getReserva() {
@@ -40,7 +43,14 @@ public class OrganizacionFiestas {
 		this.clientes = clientes;
 	}
 	
-	public void inicializarReserva(Cliente cliente){
+	public void inicializar(){
+		articulos = GestionFicheros.cargarArticulos();
+		clientes = GestionFicheros.cargarClientes();
+		descuento = false;
+		inicializarReserva(null);
+	}
+	
+	private void inicializarReserva(Cliente cliente){
 		reserva = new Reserva();
 		reserva.setCliente(cliente);
 	}
@@ -52,6 +62,7 @@ public class OrganizacionFiestas {
 			if (contraseña.equals(cliente.getContraseña())){
 				inicializarReserva(cliente);
 				reserva.setCliente(cliente);
+				descuento = true;
 				return true;
 			}
 		}
@@ -66,6 +77,7 @@ public class OrganizacionFiestas {
 		GestionFicheros.guardarCliente(cliente);
 		inicializarReserva(cliente);
 		clientes = GestionFicheros.cargarClientes();
+		descuento = true;
 		return true;
 	}
 	
@@ -90,6 +102,14 @@ public class OrganizacionFiestas {
 	public void añadirArticuloReserva(Articulo articulo) {
 		reserva.añadirArticulo(articulo);
 		
+	}
+
+	public void imprimirFactura() {
+		try {
+			GestionFicheros.guardarFactura(reserva);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}		
 	}
 	
 	
