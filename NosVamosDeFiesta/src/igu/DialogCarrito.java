@@ -1,25 +1,30 @@
 package igu;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.FlowLayout;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.GridLayout;
-import javax.swing.JTextField;
-import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+
 import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+
+import logica.Articulo;
 
 public class DialogCarrito extends JDialog {
+	
 
 	private final JPanel contentPanel = new JPanel();
+	private VentanaPrincipal vp;
 	private JPanel panelBotones;
 	private JButton btnCerrar;
 	private JPanel panelTituloCarrito;
@@ -41,6 +46,7 @@ public class DialogCarrito extends JDialog {
 	 */
 	public DialogCarrito() {
 		setResizable(false);
+		setModal(true);
 		setBounds(100, 100, 700, 450);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -49,6 +55,12 @@ public class DialogCarrito extends JDialog {
 		contentPanel.add(getPanelBotones(), BorderLayout.SOUTH);
 		contentPanel.add(getPanelTituloCarrito(), BorderLayout.NORTH);
 		contentPanel.add(getPanelArticulosCarrito(), BorderLayout.CENTER);
+	}
+
+	public DialogCarrito(VentanaPrincipal ventanaPrincipal) {
+		this();
+		vp = ventanaPrincipal;
+		rellenarCarrito();
 	}
 
 	private JPanel getPanelBotones() {
@@ -170,5 +182,22 @@ public class DialogCarrito extends JDialog {
 			panelContenedorArticulos.setLayout(new GridLayout(0, 1, 0, 0));
 		}
 		return panelContenedorArticulos;
+	}
+	
+	private void rellenarCarrito(){
+		List<Articulo> articulosCarrito = vp.getArticulosCarrito();
+		for (Articulo a : articulosCarrito){
+			panelContenedorArticulos.add(new PanelArticuloCarrito(this,a));
+		}
+	}
+
+	public void eliminarArticuloCarrito(Articulo articulo) {
+		vp.eliminarArticuloCarrito(articulo);
+		panelContenedorArticulos.removeAll();
+		rellenarCarrito();	
+	}
+	
+	private void vaciarCarrito(){
+		
 	}
 }

@@ -1,44 +1,51 @@
 package igu;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
-import logica.OrganizacionFiestas;
 import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+import javax.swing.Box;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
-import java.awt.Color;
-import java.awt.Font;
-import javax.swing.ImageIcon;
-import java.awt.FlowLayout;
-import java.awt.Toolkit;
-import java.awt.GridLayout;
-import javax.swing.JTextField;
+import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.border.TitledBorder;
-import java.awt.Component;
-import javax.swing.Box;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
-import java.awt.Dimension;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextArea;
-import javax.swing.JCheckBox;
+import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
-import java.util.Date;
-import java.util.Calendar;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
+
+import com.jtattoo.plaf.hifi.HiFiLookAndFeel;
+
+import logica.Articulo;
+import logica.OrganizacionFiestas;
 
 public class VentanaPrincipal extends JFrame {
 
 	private OrganizacionFiestas organizacionFiestas;
+	private DialogCarrito dialogCarrito;
 	private JPanel contentPane;
 	private JPanel panelContenedor;
 	private JPanel panelBienvenida;
@@ -97,7 +104,7 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel panelAsistentesConfiguracion;
 	private JLabel lblTituloConfiguracion;
 	private JLabel lblNmeroDeAsistentes;
-	private JSpinner spinner;
+	private JSpinner spinnerConfiguracion;
 	private JPanel panelTipoFiestaConfiguracion;
 	private JPanel panelDescripcionConfiguracion;
 	private JPanel panelAsistentes;
@@ -109,7 +116,7 @@ public class VentanaPrincipal extends JFrame {
 	private JTextArea textAreaDescripcionConfiguracion;
 	private JPanel panelTipoFiesta;
 	private JLabel lblTipoDeFiesta;
-	private JTextField textField;
+	private JTextField txtTipoFiestaConfiguracion;
 	private Component verticalStrut_11;
 	private Component verticalStrut_12;
 	private JPanel panelLabelDescripcion;
@@ -225,6 +232,11 @@ public class VentanaPrincipal extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					Properties p = new Properties();
+					p.put("logoString", "");
+					HiFiLookAndFeel.setCurrentTheme(p);
+					//UIManager.setLookAndFeel("com.jtattoo.plaf.mcwin.McWinLookAndFeel");
+					UIManager.setLookAndFeel("com.jtattoo.plaf.luna.LunaLookAndFeel");
 					VentanaPrincipal frame = new VentanaPrincipal();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -255,13 +267,13 @@ public class VentanaPrincipal extends JFrame {
 		if (panelContenedor == null) {
 			panelContenedor = new JPanel();
 			panelContenedor.setLayout(new CardLayout(0, 0));
-			panelContenedor.add(getPanelBienvenida(), "name_392626165650801");
-			panelContenedor.add(getPanelInicio(), "name_393999272847387");
-			panelContenedor.add(getPanelConfiguracionFiesta(), "name_18654399956158");
-			panelContenedor.add(getPanelCatalogo(), "name_433690722399634");
-			panelContenedor.add(getPanelFormalizacion(), "name_442786314426274");
-			panelContenedor.add(getPanelResumen(), "name_445967455209251");
-			panelContenedor.add(getPanelCompletado(), "name_446888496605853");
+			panelContenedor.add(getPanelBienvenida(), "bienvenida");
+			panelContenedor.add(getPanelInicio(), "inicio");
+			panelContenedor.add(getPanelConfiguracionFiesta(), "configuracion");
+			panelContenedor.add(getPanelCatalogo(), "catalogo");
+			panelContenedor.add(getPanelFormalizacion(), "formalizacion");
+			panelContenedor.add(getPanelResumen(), "resumen");
+			panelContenedor.add(getPanelCompletado(), "completado");
 		}
 		return panelContenedor;
 	}
@@ -354,8 +366,7 @@ public class VentanaPrincipal extends JFrame {
 			btnIdentificate = new JButton("Identif\u00EDcate");
 			btnIdentificate.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if(identificarCliente())
-					cambiarPanel(false, false, true, false, false, false, false);
+					identificacionCliente();
 				}
 			});
 			btnIdentificate.setMnemonic('D');
@@ -366,6 +377,11 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnRegistrate() {
 		if (btnRegistrate == null) {
 			btnRegistrate = new JButton("Reg\u00EDstrate");
+			btnRegistrate.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					registroCliente();
+				}
+			});
 			btnRegistrate.setMnemonic('R');
 			btnRegistrate.setFont(new Font("Dialog", Font.BOLD, 18));
 		}
@@ -727,6 +743,12 @@ public class VentanaPrincipal extends JFrame {
 			btnSiguiente = new JButton("Siguiente");
 			btnSiguiente.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					organizacionFiestas.configurarReserva(
+							txtTipoFiestaConfiguracion.getText(),
+							textAreaDescripcionConfiguracion.getText(),
+							(int) spinnerConfiguracion.getValue()
+							);
+					inicializarCatalogo();
 					cambiarPanel(false, false, false, true, false, false, false);
 				}
 			});
@@ -773,18 +795,18 @@ public class VentanaPrincipal extends JFrame {
 		if (lblNmeroDeAsistentes == null) {
 			lblNmeroDeAsistentes = new JLabel("N\u00FAmero de asistentes: ");
 			lblNmeroDeAsistentes.setDisplayedMnemonic('N');
-			lblNmeroDeAsistentes.setLabelFor(getSpinner());
+			lblNmeroDeAsistentes.setLabelFor(getSpinnerConfiguracion());
 			lblNmeroDeAsistentes.setFont(new Font("Dialog", Font.BOLD, 18));
 		}
 		return lblNmeroDeAsistentes;
 	}
-	private JSpinner getSpinner() {
-		if (spinner == null) {
-			spinner = new JSpinner();
-			spinner.setMinimumSize(new Dimension(40, 40));
-			spinner.setModel(new SpinnerNumberModel(new Integer(1), new Integer(0), null, new Integer(1)));
+	private JSpinner getSpinnerConfiguracion() {
+		if (spinnerConfiguracion == null) {
+			spinnerConfiguracion = new JSpinner();
+			spinnerConfiguracion.setMinimumSize(new Dimension(40, 40));
+			spinnerConfiguracion.setModel(new SpinnerNumberModel(new Integer(1), new Integer(0), null, new Integer(1)));
 		}
-		return spinner;
+		return spinnerConfiguracion;
 	}
 	private JPanel getPanelTipoFiestaConfiguracion() {
 		if (panelTipoFiestaConfiguracion == null) {
@@ -809,7 +831,7 @@ public class VentanaPrincipal extends JFrame {
 			panelAsistentes = new JPanel();
 			panelAsistentes.setLayout(new GridLayout(0, 2, 0, 0));
 			panelAsistentes.add(getPanelLabelAsistentes());
-			panelAsistentes.add(getSpinner());
+			panelAsistentes.add(getSpinnerConfiguracion());
 		}
 		return panelAsistentes;
 	}
@@ -863,7 +885,7 @@ public class VentanaPrincipal extends JFrame {
 			panelTipoFiesta = new JPanel();
 			panelTipoFiesta.setLayout(new GridLayout(0, 2, 0, 0));
 			panelTipoFiesta.add(getPanelLabelTipoFiesta());
-			panelTipoFiesta.add(getTextField());
+			panelTipoFiesta.add(getTxtTipoFiestaConfiguracion());
 		}
 		return panelTipoFiesta;
 	}
@@ -871,18 +893,18 @@ public class VentanaPrincipal extends JFrame {
 		if (lblTipoDeFiesta == null) {
 			lblTipoDeFiesta = new JLabel("Tipo de Fiesta: ");
 			lblTipoDeFiesta.setDisplayedMnemonic('T');
-			lblTipoDeFiesta.setLabelFor(getTextField());
+			lblTipoDeFiesta.setLabelFor(getTxtTipoFiestaConfiguracion());
 			lblTipoDeFiesta.setFont(new Font("Dialog", Font.BOLD, 18));
 		}
 		return lblTipoDeFiesta;
 	}
-	private JTextField getTextField() {
-		if (textField == null) {
-			textField = new JTextField();
-			textField.setFont(new Font("Dialog", Font.PLAIN, 18));
-			textField.setColumns(10);
+	private JTextField getTxtTipoFiestaConfiguracion() {
+		if (txtTipoFiestaConfiguracion == null) {
+			txtTipoFiestaConfiguracion = new JTextField();
+			txtTipoFiestaConfiguracion.setFont(new Font("Dialog", Font.PLAIN, 18));
+			txtTipoFiestaConfiguracion.setColumns(10);
 		}
-		return textField;
+		return txtTipoFiestaConfiguracion;
 	}
 	private Component getVerticalStrut_11() {
 		if (verticalStrut_11 == null) {
@@ -960,7 +982,7 @@ public class VentanaPrincipal extends JFrame {
 			panelCentralCatalogo = new JPanel();
 			panelCentralCatalogo.setLayout(new BorderLayout(0, 0));
 			panelCentralCatalogo.add(getPanelFiltradoCatalogo(), BorderLayout.NORTH);
-			panelCentralCatalogo.add(getPanelContenedorArticulos(), BorderLayout.SOUTH);
+			panelCentralCatalogo.add(getPanelContenedorArticulos(), BorderLayout.CENTER);
 		}
 		return panelCentralCatalogo;
 	}
@@ -991,7 +1013,7 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel getPanelArticulosCatalogo() {
 		if (panelArticulosCatalogo == null) {
 			panelArticulosCatalogo = new JPanel();
-			panelArticulosCatalogo.setLayout(new GridLayout(0, 2, 0, 0));
+			panelArticulosCatalogo.setLayout(new GridLayout(0, 2, 3, 3));
 		}
 		return panelArticulosCatalogo;
 	}
@@ -1020,6 +1042,11 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnCarrito() {
 		if (btnCarrito == null) {
 			btnCarrito = new JButton("Carrito");
+			btnCarrito.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					lanzarCarrito();
+				}
+			});
 			btnCarrito.setMnemonic('R');
 			btnCarrito.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		}
@@ -1104,8 +1131,8 @@ public class VentanaPrincipal extends JFrame {
 			panelContenedorArticulos = new JPanel();
 			panelContenedorArticulos.setLayout(new BorderLayout(0, 0));
 			panelContenedorArticulos.add(getHorizontalStrut_4(), BorderLayout.WEST);
-			panelContenedorArticulos.add(getScrollPaneArticulosCatalogo(), BorderLayout.NORTH);
-			panelContenedorArticulos.add(getHorizontalStrut_3(), BorderLayout.SOUTH);
+			panelContenedorArticulos.add(getScrollPaneArticulosCatalogo(), BorderLayout.CENTER);
+			panelContenedorArticulos.add(getHorizontalStrut_3(), BorderLayout.EAST);
 		}
 		return panelContenedorArticulos;
 	}
@@ -1785,13 +1812,61 @@ public class VentanaPrincipal extends JFrame {
 		//Aquí inicializamos
 	}
 	
-	private boolean identificarCliente(){
-		if(!organizacionFiestas.identificar(
+	private void identificacionCliente(){
+		if(!organizacionFiestas.identificarCliente(
 				txtNombreIdentificacion.getText(), 
-				String.valueOf(pwIdentificacion.getPassword()))){
+				String.valueOf(pwIdentificacion.getPassword())))
 			JOptionPane.showMessageDialog(this, "El usuario no existe o no es correcto.");
-			return false;
+		else {
+			configurarNombreCliente();
+			cambiarPanel(false, false, true, false, false, false, false);
 		}
-		return true;
 	}
+	
+	private void registroCliente() {
+		if (!organizacionFiestas.registrarCliente(txtNombreRegistro.getText(),
+				String.valueOf(pwRegistro.getPassword()))) {
+			JOptionPane.showMessageDialog(this, "Ya existe un usuario registrado con ese nombre de usuario.");
+		} else {
+			configurarNombreCliente();
+			JOptionPane.showMessageDialog(this, "Se ha registrado correctamente. Disfrute de nuestros descuentos!");
+			cambiarPanel(false, false, true, false, false, false, false);
+		}
+	}
+	
+	private void configurarNombreCliente(){
+		lblNombreClienteConfiguracion.setText(
+				lblNombreClienteConfiguracion.getText() + " " + organizacionFiestas.getReserva().getCliente().getNombre());
+		lblNombreClienteCatalogo.setText(organizacionFiestas.getReserva().getCliente().getNombre());
+		lblNombreClienteFormalizacion.setText(organizacionFiestas.getReserva().getCliente().getNombre());
+	}
+	
+	private void inicializarCatalogo() {
+		Map<String, Articulo> articulos = organizacionFiestas.getArticulos();
+		PanelArticuloCatalogo panel = null;
+		for(Articulo a : articulos.values()){
+			panel = new PanelArticuloCatalogo(this, a);
+			panel.setBounds(0, 0, panelArticulosCatalogo.getWidth()/2, panelArticulosCatalogo.getHeight()/2);
+			panelArticulosCatalogo.add(panel);
+		}
+	}
+	
+	public void añadirArticuloReserva(Articulo articulo){
+		organizacionFiestas.añadirArticuloReserva(articulo);
+	}
+	
+	private void lanzarCarrito() {
+		dialogCarrito = new DialogCarrito(this);
+		if (!dialogCarrito.isVisible())
+			dialogCarrito.setVisible(true);
+	}
+
+	public List<Articulo> getArticulosCarrito() {
+		return organizacionFiestas.getReserva().getArticulos();
+	}
+
+	public void eliminarArticuloCarrito(Articulo articulo) {
+		organizacionFiestas.getReserva().eliminarArticulo(articulo);		
+	}
+	
 }

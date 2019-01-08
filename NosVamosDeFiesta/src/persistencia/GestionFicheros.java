@@ -75,8 +75,8 @@ public class GestionFicheros {
 	public static void guardarCliente(Cliente cliente) {
 		try {
 			bw = new BufferedWriter(new FileWriter(FICHERO_CLIENTES));
-			bw.newLine();
 			bw.write(cliente.getNombre() + "@" + cliente.getContraseña());
+			bw.newLine();
 			bw.close();
 		} catch (FileNotFoundException e) {
 			System.out.println("El fichero " + FICHERO_CLIENTES + " no se ha encontrado.");

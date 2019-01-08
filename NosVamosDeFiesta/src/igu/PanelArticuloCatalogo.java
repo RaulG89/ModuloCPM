@@ -1,21 +1,34 @@
 package igu;
 
-import javax.swing.JPanel;
-import java.awt.GridLayout;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
 import java.awt.BorderLayout;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JButton;
-import javax.swing.JSpinner;
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.Box;
-import javax.swing.JCheckBox;
-import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.border.LineBorder;
+
+import logica.Articulo;
 
 public class PanelArticuloCatalogo extends JPanel {
+	private VentanaPrincipal vp;
+	private Articulo articulo;
 	private JLabel lblImagen;
 	private JPanel panelDatosArticulo;
 	private JPanel panelDescripcion;
@@ -52,17 +65,37 @@ public class PanelArticuloCatalogo extends JPanel {
 	 * Create the panel.
 	 */
 	public PanelArticuloCatalogo() {
+		setBorder(new LineBorder(new Color(0, 0, 0)));
+		setBounds(new Rectangle(0, 0, 300, 215));
 		setLayout(new GridLayout(2, 2, 0, 0));
 		add(getLblImagen());
 		add(getPanelDatosArticulo());
 		add(getPanelDescripcion());
 		add(getPanelAñadir());
+		setPreferredSize(new Dimension(300,215));
 
+	}
+
+	public PanelArticuloCatalogo(VentanaPrincipal ventanaPrincipal, Articulo articulo) {
+		this();
+		this.articulo = articulo;
+		this.vp = ventanaPrincipal;
+		inicializarPanelArticulo();
+	}
+
+	private void inicializarPanelArticulo() {
+		txtDenominacion.setText(articulo.getDenominacion());
+		txtPrecioGrupo.setText(String.valueOf(articulo.getPrecioGrupo()));
+		txtPrecioUnitario.setText(String.valueOf(articulo.getPrecioUnidad()));
+		txtTipoArticulo.setText(articulo.getTipo().name());
+		textAreaDescripcion.setText(articulo.getDescripcion());
+		adaptarImagenLabel(lblImagen, articulo.getFoto());
 	}
 
 	private JLabel getLblImagen() {
 		if (lblImagen == null) {
 			lblImagen = new JLabel("");
+			lblImagen.setBounds(new Rectangle(0, 0, 150, 107));
 		}
 		return lblImagen;
 	}
@@ -180,6 +213,18 @@ public class PanelArticuloCatalogo extends JPanel {
 	private JButton getBtnAadir() {
 		if (btnAadir == null) {
 			btnAadir = new JButton("A\u00F1adir");
+			btnAadir.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if(rdbtnUnidades.isSelected()){
+						articulo.setUnidades((int) spinner.getValue());
+						vp.añadirArticuloReserva(articulo);
+						spinner.setValue(1);
+					} else {
+						articulo.setGrupo(true);
+						vp.añadirArticuloReserva(articulo);
+					}
+				}
+			});
 			btnAadir.setMnemonic('Ñ');
 		}
 		return btnAadir;
@@ -187,6 +232,7 @@ public class PanelArticuloCatalogo extends JPanel {
 	private JSpinner getSpinner() {
 		if (spinner == null) {
 			spinner = new JSpinner();
+			spinner.setModel(new SpinnerNumberModel(new Integer(1), null, null, new Integer(1)));
 			spinner.setEnabled(false);
 		}
 		return spinner;
@@ -255,7 +301,8 @@ public class PanelArticuloCatalogo extends JPanel {
 			panelUnidades = new JPanel();
 			panelUnidades.setLayout(new GridLayout(0, 2, 0, 0));
 			panelUnidades.add(getLblUnidades());
-			panelUnidades.add(getSpinner());
+			panelUnidades.add(getSpinner());		
+			
 		}
 		return panelUnidades;
 	}
@@ -283,6 +330,12 @@ public class PanelArticuloCatalogo extends JPanel {
 	private JRadioButton getRdbtnUnidades() {
 		if (rdbtnUnidades == null) {
 			rdbtnUnidades = new JRadioButton("Unidades");
+			rdbtnUnidades.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					lblUnidades.setEnabled(true);
+					spinner.setEnabled(true);
+				}
+			});
 			buttonGroup.add(rdbtnUnidades);
 		}
 		return rdbtnUnidades;
@@ -290,8 +343,23 @@ public class PanelArticuloCatalogo extends JPanel {
 	private JRadioButton getRdbtnGrupo() {
 		if (rdbtnGrupo == null) {
 			rdbtnGrupo = new JRadioButton("Grupo");
+			rdbtnGrupo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					lblUnidades.setEnabled(false);
+					spinner.setEnabled(false);
+				}
+			});
 			buttonGroup.add(rdbtnGrupo);
 		}
 		return rdbtnGrupo;
+	}
+	
+	private void adaptarImagenLabel(JLabel label, String rutaImagen) {
+		Image imgOriginal = new ImageIcon(getClass().getResource(rutaImagen)).getImage();
+		Image imgEscalada = imgOriginal.getScaledInstance(
+				(int) (label.getWidth()), 
+				(int) (label.getHeight()),
+				Image.SCALE_FAST);
+		label.setIcon(new ImageIcon(imgEscalada));
 	}
 }

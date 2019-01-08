@@ -2,16 +2,27 @@ package igu;
 
 import javax.swing.JPanel;
 import java.awt.GridLayout;
+import java.awt.Image;
+
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JTextField;
+
+import logica.Articulo;
+
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Dimension;
 import java.awt.Component;
 import javax.swing.Box;
+import javax.swing.ImageIcon;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.Rectangle;
 
 public class PanelArticuloCarrito extends JPanel {
+	private DialogCarrito dc;
+	private Articulo articulo;
 	private JLabel lblImagen;
 	private JPanel panelInformacionArticulo;
 	private JPanel panelUnidades;
@@ -39,9 +50,32 @@ public class PanelArticuloCarrito extends JPanel {
 
 	}
 
+	public PanelArticuloCarrito(DialogCarrito dialogCarrito, Articulo articulo) {
+		this();
+		this.articulo = articulo;
+		this.dc = dialogCarrito;
+		inicializarPanelArticuloCarrito();
+	}
+
+	private void inicializarPanelArticuloCarrito() {
+		setPreferredSize(new Dimension(600,110));
+		txtDenominacion.setText(articulo.getDenominacion());
+		if (articulo.isGrupo()){
+			txtPrecio.setText(String.valueOf(articulo.getPrecioGrupo()));
+			txtUnidades.setEnabled(false);
+		} else {
+			txtPrecio.setText(String.valueOf(articulo.getPrecioUnidad()));
+			txtUnidades.setText(String.valueOf(articulo.getUnidades()));
+		}
+		lblImagen.setPreferredSize(new Dimension(150,110));
+		adaptarImagenLabel(lblImagen, articulo.getFoto());
+		
+	}
+
 	private JLabel getLblImagen() {
 		if (lblImagen == null) {
 			lblImagen = new JLabel("");
+			lblImagen.setBounds(new Rectangle(0, 0, 150, 110));
 		}
 		return lblImagen;
 	}
@@ -74,6 +108,11 @@ public class PanelArticuloCarrito extends JPanel {
 	private JButton getBtnEliminar() {
 		if (btnEliminar == null) {
 			btnEliminar = new JButton("Eliminar");
+			btnEliminar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					dc.eliminarArticuloCarrito(articulo);
+				}
+			});
 		}
 		return btnEliminar;
 	}
@@ -147,5 +186,14 @@ public class PanelArticuloCarrito extends JPanel {
 			panel.add(getLblUnidades());
 		}
 		return panel;
+	}
+	
+	private void adaptarImagenLabel(JLabel label, String rutaImagen) {
+		Image imgOriginal = new ImageIcon(getClass().getResource(rutaImagen)).getImage();
+		Image imgEscalada = imgOriginal.getScaledInstance(
+				(int) (label.getWidth()), 
+				(int) (label.getHeight()),
+				Image.SCALE_FAST);
+		label.setIcon(new ImageIcon(imgEscalada));
 	}
 }

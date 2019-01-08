@@ -15,6 +15,14 @@ public class OrganizacionFiestas {
 		articulos = GestionFicheros.cargarArticulos();
 		clientes = GestionFicheros.cargarClientes();
 	}
+	
+	public Reserva getReserva() {
+		return reserva;
+	}
+
+	public void setReserva(Reserva reserva) {
+		this.reserva = reserva;
+	}
 
 	public HashMap<String, Articulo> getArticulos() {
 		return articulos;
@@ -32,14 +40,31 @@ public class OrganizacionFiestas {
 		this.clientes = clientes;
 	}
 	
-	public void inicializarReserva(){
+	public void inicializarReserva(Cliente cliente){
 		reserva = new Reserva();
+		reserva.setCliente(cliente);
 	}
 	
-	public boolean registrarCliente(Cliente cliente){
-		if(clientes.containsKey(cliente.getNombre()))
+	public boolean identificarCliente(String nombre, String contraseña) {
+		Cliente cliente = null;
+		if (clientes.containsKey(nombre)){
+			cliente = clientes.get(nombre);
+			if (contraseña.equals(cliente.getContraseña())){
+				inicializarReserva(cliente);
+				reserva.setCliente(cliente);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean registrarCliente(String nombre, String contraseña){
+		if(clientes.containsKey(nombre))
 			return false;
+		
+		Cliente cliente = new Cliente(nombre,contraseña);
 		GestionFicheros.guardarCliente(cliente);
+		inicializarReserva(cliente);
 		clientes = GestionFicheros.cargarClientes();
 		return true;
 	}
@@ -53,17 +78,20 @@ public class OrganizacionFiestas {
 		reserva.setArticulos(new ArrayList<Articulo>());
 	}
 
-	public boolean identificar(String nombre, String contraseña) {
-		Cliente cliente = null;
-		if (clientes.containsKey(nombre)){
-			cliente = clientes.get(nombre);
-			if (contraseña.equals(cliente.getContraseña())){
-				reserva.setCliente(cliente);
-				return true;
-			}
-		}
-		return false;
+	public void configurarReserva(String tipoFiesta, String descripcion, int numPersonas) {
+		if(reserva == null)	
+			inicializarReserva(null);
+
+		reserva.setTipoFiesta(tipoFiesta);
+		reserva.setDescripcion(descripcion);
+		reserva.setNumPersonas(numPersonas);
 	}
+
+	public void añadirArticuloReserva(Articulo articulo) {
+		reserva.añadirArticulo(articulo);
+		
+	}
+	
 	
 
 	

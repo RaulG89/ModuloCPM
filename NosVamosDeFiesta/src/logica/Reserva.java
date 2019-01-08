@@ -16,8 +16,8 @@ public class Reserva {
 	private Date fecha;
 	private String observacion;
 
-	private List<Articulo> articulos;
-	private List<Articulo> articulosRecuperar;
+	private List<Articulo> articulos = new ArrayList<Articulo>();
+	private List<Articulo> articulosRecuperar = new ArrayList<Articulo>();
 
 	public Reserva() { }
 
@@ -26,18 +26,11 @@ public class Reserva {
 		this.tipoFiesta = tipoFiesta;
 		this.descripcion = descripcion;
 		this.numPersonas = numPersonas;
-		articulos = new ArrayList<Articulo>();
-		articulosRecuperar = new ArrayList<Articulo>();
 	}
 	
 	public Reserva(Cliente cliente, String tipoFiesta, String descripcion, int numPersonas) {
-		super();
+		this(tipoFiesta, descripcion, numPersonas);
 		this.cliente = cliente;
-		this.tipoFiesta = tipoFiesta;
-		this.descripcion = descripcion;
-		this.numPersonas = numPersonas;
-		articulos = new ArrayList<Articulo>();
-		articulosRecuperar = new ArrayList<Articulo>();
 	}
 
 	public Cliente getCliente() {
@@ -141,6 +134,21 @@ public class Reserva {
 		return "Reserva [tipoFiesta=" + tipoFiesta + ", descripcion=" + descripcion + ", numPersonas=" + numPersonas
 				+ ", nombre=" + nombre + ", apellidos=" + apellidos + ", nif=" + nif + ", fecha=" + fecha
 				+ ", observacion=" + observacion + ", articulos=" + articulos + "]";
+	}
+
+	public void añadirArticulo(Articulo articulo) {
+		if(articulos.contains(articulo)){
+			int unidadesAnteriores = articulos.get(articulos.indexOf(articulo)).getUnidades();
+			articulos.remove(articulo);
+			articulo.setUnidades(articulo.getUnidades() + unidadesAnteriores);
+			articulos.add(articulo);
+			
+		}else
+			articulos.add(articulo);
+	}
+
+	public void eliminarArticulo(Articulo articulo) {
+		articulos.remove(articulo);		
 	}
 
 		

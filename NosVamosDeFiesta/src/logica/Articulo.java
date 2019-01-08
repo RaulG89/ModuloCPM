@@ -24,6 +24,7 @@ public class Articulo {
 		this.descripcion = descripcion;
 		this.precioUnidad = precioUnidad;
 		this.precioGrupo = precioGrupo;
+		foto = "/img/" + codigo + ".jpg";
 	}
 
 	public String getCodigo() {
