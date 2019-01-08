@@ -16,7 +16,7 @@ public class Articulo {
 	private boolean grupo;
 	
 	public Articulo(String codigo, TipoArticulo tipo, String denominacion, String descripcion, float precioUnidad,
-			float precioGrupo) {
+			float precioGrupo, boolean grupo) {
 		super();
 		this.codigo = codigo;
 		this.tipo = tipo;
@@ -24,6 +24,7 @@ public class Articulo {
 		this.descripcion = descripcion;
 		this.precioUnidad = precioUnidad;
 		this.precioGrupo = precioGrupo;
+		this.grupo = grupo;
 		foto = "/img/" + codigo + ".jpg";
 	}
 
@@ -108,8 +109,16 @@ public class Articulo {
 
 	public float getImporte(int numPersonas) {
 		if (isGrupo())
-			return precioGrupo * numPersonas;
+			return getPrecioGrupo(numPersonas);
 		return precioUnidad * unidades;
+	}
+	
+	private float getPrecioGrupo(int numpersonas) {
+		float tamañoGrupo = numpersonas;
+		while(tamañoGrupo%10!=0) {
+			tamañoGrupo++;
+		}
+		return precioGrupo * (tamañoGrupo/10);
 	}
 	
 }

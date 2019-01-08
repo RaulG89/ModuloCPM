@@ -74,7 +74,7 @@ public class OrganizacionFiestas {
 	}
 	
 	public void vaciarCarrito(){
-		reserva.setArticulosRecuperar(reserva.getArticulos());
+		reserva.setArticulosRecuperar(new ArrayList<Articulo>(reserva.getArticulos()));
 		reserva.setArticulos(new ArrayList<Articulo>());
 	}
 

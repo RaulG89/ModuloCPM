@@ -12,8 +12,10 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -40,12 +42,15 @@ import javax.swing.border.TitledBorder;
 import com.jtattoo.plaf.hifi.HiFiLookAndFeel;
 
 import logica.Articulo;
+import logica.DateConverter;
 import logica.OrganizacionFiestas;
+import logica.tipos.TipoArticulo;
 
 public class VentanaPrincipal extends JFrame {
 
 	private OrganizacionFiestas organizacionFiestas;
 	private DialogCarrito dialogCarrito;
+	private DateConverter dateConverter;
 	private JPanel contentPane;
 	private JPanel panelContenedor;
 	private JPanel panelBienvenida;
@@ -184,15 +189,12 @@ public class VentanaPrincipal extends JFrame {
 	private JTextField txtNif;
 	private Component verticalStrut_14;
 	private JPanel panelFecha;
-	private JLabel lblFecha;
 	private JPanel panelHora;
-	private JLabel lblHora;
-	private JTextField txtHora;
 	private JPanel panelObservaciones;
 	private JLabel lblObservaciones;
 	private JTextField txtObservaciones;
 	private Component verticalStrut_15;
-	private JSpinner spinner_1;
+	private JSpinner spinnerDia;
 	private JPanel panelResumen;
 	private JPanel panelSuperiorResumen;
 	private JPanel panelInferiorResumen;
@@ -223,6 +225,19 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel lblTituloCompletado;
 	private JPanel panelTituloCompletado;
 	private JLabel lblImagenCompletado;
+	private JPanel panelSeleccionFecha;
+	private JLabel lblDia;
+	private JLabel lblMes;
+	private JSpinner spinnerMes;
+	private JLabel lblAño;
+	private JSpinner spinnerAño;
+	private JPanel panelSeleccionHora;
+	private JSpinner spinnerHora;
+	private JLabel lblHoraFiesta;
+	private JLabel lblMinutos;
+	private JSpinner spinnerMinutos;
+	private Component horizontalStrut_19;
+	private Component horizontalStrut_20;
 	
 
 	/**
@@ -235,8 +250,7 @@ public class VentanaPrincipal extends JFrame {
 					Properties p = new Properties();
 					p.put("logoString", "");
 					HiFiLookAndFeel.setCurrentTheme(p);
-					//UIManager.setLookAndFeel("com.jtattoo.plaf.mcwin.McWinLookAndFeel");
-					UIManager.setLookAndFeel("com.jtattoo.plaf.luna.LunaLookAndFeel");
+					UIManager.setLookAndFeel("com.jtattoo.plaf.mcwin.McWinLookAndFeel");
 					VentanaPrincipal frame = new VentanaPrincipal();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -1055,6 +1069,12 @@ public class VentanaPrincipal extends JFrame {
 	private JCheckBox getChckbxBebida() {
 		if (chckbxBebida == null) {
 			chckbxBebida = new JCheckBox("Bebida");
+			chckbxBebida.setSelected(true);
+			chckbxBebida.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					filtrarArticulosCatalogo();
+				}
+			});
 			chckbxBebida.setMnemonic('B');
 			chckbxBebida.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		}
@@ -1063,6 +1083,12 @@ public class VentanaPrincipal extends JFrame {
 	private JCheckBox getChckbxComida() {
 		if (chckbxComida == null) {
 			chckbxComida = new JCheckBox("Comida");
+			chckbxComida.setSelected(true);
+			chckbxComida.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					filtrarArticulosCatalogo();
+				}
+			});
 			chckbxComida.setMnemonic('M');
 			chckbxComida.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		}
@@ -1071,6 +1097,12 @@ public class VentanaPrincipal extends JFrame {
 	private JCheckBox getChckbxDecoracin() {
 		if (chckbxDecoracin == null) {
 			chckbxDecoracin = new JCheckBox("Decoraci\u00F3n");
+			chckbxDecoracin.setSelected(true);
+			chckbxDecoracin.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					filtrarArticulosCatalogo();
+				}
+			});
 			chckbxDecoracin.setMnemonic('D');
 			chckbxDecoracin.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		}
@@ -1079,6 +1111,12 @@ public class VentanaPrincipal extends JFrame {
 	private JCheckBox getChckbxLocal() {
 		if (chckbxLocal == null) {
 			chckbxLocal = new JCheckBox("Local");
+			chckbxLocal.setSelected(true);
+			chckbxLocal.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					filtrarArticulosCatalogo();
+				}
+			});
 			chckbxLocal.setMnemonic('L');
 			chckbxLocal.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		}
@@ -1087,6 +1125,12 @@ public class VentanaPrincipal extends JFrame {
 	private JCheckBox getChckbxOtros() {
 		if (chckbxOtros == null) {
 			chckbxOtros = new JCheckBox("Otros");
+			chckbxOtros.setSelected(true);
+			chckbxOtros.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					filtrarArticulosCatalogo();
+				}
+			});
 			chckbxOtros.setMnemonic('T');
 			chckbxOtros.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		}
@@ -1250,13 +1294,39 @@ public class VentanaPrincipal extends JFrame {
 			btnSiguienteFormalizacion = new JButton("Siguiente");
 			btnSiguienteFormalizacion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					cambiarPanel(false, false, false, false, false, true, false);
+					if(validarFormularioFormalizacion()) {
+						cambiarPanel(false, false, false, false, false, true, false);
+					}
 				}
 			});
 			btnSiguienteFormalizacion.setFont(new Font("Tahoma", Font.PLAIN, 18));
 			btnSiguienteFormalizacion.setMnemonic('S');
 		}
 		return btnSiguienteFormalizacion;
+	}
+	
+	private boolean validarFormularioFormalizacion(){
+		String cadenaFecha = "" + spinnerDia.getValue() + "-" + spinnerMes.getValue() + "-" + spinnerAño.getValue();
+		Date fecha = null;
+		try {
+			fecha = dateConverter.stringToDate(cadenaFecha);
+		} catch (ParseException e) {
+			JOptionPane.showMessageDialog(this, "La fecha indicada no es valida.");
+		}
+		if (txtNombreFormalizacion.getText().equals("") || txtApellidosFormalizacion.getText().equals("")
+				|| txtNif.getText().equals("") || txtObservaciones.getText().equals("")) {
+			JOptionPane.showMessageDialog(this, "No se pueden dejar campos en blanco.");
+			return false;
+		}
+		if (fecha.compareTo(new Date()) < 0) {
+			JOptionPane.showMessageDialog(this, "La fecha indicada ya ha pasado.");
+			return false;
+		}
+		organizacionFiestas.getReserva().setNombre(txtNombreFormalizacion.getText());
+		organizacionFiestas.getReserva().setApellidos(txtApellidosFormalizacion.getText());
+		organizacionFiestas.getReserva().setNif(txtNif.getText());
+		organizacionFiestas.getReserva().setFecha(fecha);
+		return true;
 	}
 	private JButton getBtnCancelarFormalizacion() {
 		if (btnCancelarFormalizacion == null) {
@@ -1354,7 +1424,7 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel getPanelDatosFiesta() {
 		if (panelDatosFiesta == null) {
 			panelDatosFiesta = new JPanel();
-			panelDatosFiesta.setLayout(new GridLayout(0, 1, 0, 0));
+			panelDatosFiesta.setLayout(new GridLayout(0, 1, 0, 5));
 			panelDatosFiesta.add(getVerticalStrut_14());
 			panelDatosFiesta.add(getPanelFecha());
 			panelDatosFiesta.add(getPanelHora());
@@ -1463,46 +1533,133 @@ public class VentanaPrincipal extends JFrame {
 		if (panelFecha == null) {
 			panelFecha = new JPanel();
 			panelFecha.setLayout(new GridLayout(0, 2, 0, 0));
-			panelFecha.add(getLblFecha());
-			panelFecha.add(getSpinner_1());
+			panelFecha.add(getHorizontalStrut_19());
+			panelFecha.add(getPanelSeleccionFecha());
 		}
 		return panelFecha;
 	}
-	private JLabel getLblFecha() {
-		if (lblFecha == null) {
-			lblFecha = new JLabel("Fecha: ");
-			lblFecha.setLabelFor(getSpinner_1());
-			lblFecha.setFont(new Font("Dialog", Font.PLAIN, 18));
-			lblFecha.setDisplayedMnemonic('E');
+
+	private JPanel getPanelSeleccionFecha() {
+		if (panelSeleccionFecha == null) {
+			panelSeleccionFecha = new JPanel();
+			panelSeleccionFecha.setBorder(new TitledBorder(null, "Fecha", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			panelSeleccionFecha.setLayout(new GridLayout(3, 2, 2, 2));
+			panelSeleccionFecha.add(getLblDia());
+			panelSeleccionFecha.add(getSpinnerDia());
+			panelSeleccionFecha.add(getLblMes());
+			panelSeleccionFecha.add(getSpinnerMes());
+			panelSeleccionFecha.add(getLblAño());
+			panelSeleccionFecha.add(getSpinnerAño());
 		}
-		return lblFecha;
+		return panelSeleccionFecha;
 	}
+
+	private JLabel getLblDia() {
+		if (lblDia == null) {
+			lblDia = new JLabel("Dia: ");
+			lblDia.setLabelFor(getSpinnerDia());
+			lblDia.setDisplayedMnemonic('D');
+		}
+		return lblDia;
+	}
+
+	private JSpinner getSpinnerDia() {
+		if (spinnerDia == null) {
+			spinnerDia = new JSpinner();
+			spinnerDia.setModel(new SpinnerNumberModel(1, 1, 31, 1));
+		}
+		return spinnerDia;
+	}
+
+	private JLabel getLblMes() {
+		if (lblMes == null) {
+			lblMes = new JLabel("Mes: ");
+			lblMes.setLabelFor(getSpinnerMes());
+			lblMes.setDisplayedMnemonic('M');
+		}
+		return lblMes;
+	}
+
+	private JSpinner getSpinnerMes() {
+		if (spinnerMes == null) {
+			spinnerMes = new JSpinner();
+			spinnerMes.setModel(new SpinnerNumberModel(1, 1, 12, 1));
+		}
+		return spinnerMes;
+	}
+
+	private JLabel getLblAño() {
+		if (lblAño == null) {
+			lblAño = new JLabel("A\u00F1o: ");
+			lblAño.setLabelFor(getSpinnerAño());
+			lblAño.setDisplayedMnemonic('Ñ');
+		}
+		return lblAño;
+	}
+
+	private JSpinner getSpinnerAño() {
+		if (spinnerAño == null) {
+			spinnerAño = new JSpinner();
+			spinnerAño.setModel(new SpinnerNumberModel(2019, 2019, 2050, 1));
+		}
+		return spinnerAño;
+	}
+
 	private JPanel getPanelHora() {
 		if (panelHora == null) {
 			panelHora = new JPanel();
 			panelHora.setLayout(new GridLayout(0, 2, 0, 0));
-			panelHora.add(getLblHora());
-			panelHora.add(getTxtHora());
+			panelHora.add(getHorizontalStrut_20());
+			panelHora.add(getPanelSeleccionHora());
 		}
 		return panelHora;
 	}
-	private JLabel getLblHora() {
-		if (lblHora == null) {
-			lblHora = new JLabel("Hora:");
-			lblHora.setLabelFor(getTxtHora());
-			lblHora.setFont(new Font("Tahoma", Font.PLAIN, 18));
-			lblHora.setDisplayedMnemonic('H');
+	private JPanel getPanelSeleccionHora() {
+		if (panelSeleccionHora == null) {
+			panelSeleccionHora = new JPanel();
+			panelSeleccionHora.setBorder(new TitledBorder(null, "Hora", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			panelSeleccionHora.setLayout(new GridLayout(0, 2, 0, 2));
+			panelSeleccionHora.add(getLblHoraFiesta());
+			panelSeleccionHora.add(getSpinnerHora());
+			panelSeleccionHora.add(getLblMinutos());
+			panelSeleccionHora.add(getSpinnerMinutos());
 		}
-		return lblHora;
+		return panelSeleccionHora;
 	}
-	private JTextField getTxtHora() {
-		if (txtHora == null) {
-			txtHora = new JTextField();
-			txtHora.setFont(new Font("Tahoma", Font.PLAIN, 18));
-			txtHora.setColumns(10);
+
+	private JSpinner getSpinnerHora() {
+		if (spinnerHora == null) {
+			spinnerHora = new JSpinner();
+			spinnerHora.setModel(new SpinnerNumberModel(1, 1, 24, 1));
 		}
-		return txtHora;
+		return spinnerHora;
 	}
+
+	private JLabel getLblHoraFiesta() {
+		if (lblHoraFiesta == null) {
+			lblHoraFiesta = new JLabel("Hora: ");
+			lblHoraFiesta.setDisplayedMnemonic('H');
+		}
+		return lblHoraFiesta;
+	}
+
+	private JLabel getLblMinutos() {
+		if (lblMinutos == null) {
+			lblMinutos = new JLabel("Minutos: ");
+			lblMinutos.setLabelFor(getSpinnerMinutos());
+			lblMinutos.setDisplayedMnemonic('T');
+		}
+		return lblMinutos;
+	}
+
+	private JSpinner getSpinnerMinutos() {
+		if (spinnerMinutos == null) {
+			spinnerMinutos = new JSpinner();
+			spinnerMinutos.setModel(new SpinnerNumberModel(0, 0, 59, 1));
+		}
+		return spinnerMinutos;
+	}
+
 	private JPanel getPanelObservaciones() {
 		if (panelObservaciones == null) {
 			panelObservaciones = new JPanel();
@@ -1534,13 +1691,6 @@ public class VentanaPrincipal extends JFrame {
 			verticalStrut_15 = Box.createVerticalStrut(20);
 		}
 		return verticalStrut_15;
-	}
-	private JSpinner getSpinner_1() {
-		if (spinner_1 == null) {
-			spinner_1 = new JSpinner();
-			spinner_1.setModel(new SpinnerDateModel(new Date(1546988400000L), new Date(1546297200000L), null, Calendar.DAY_OF_YEAR));
-		}
-		return spinner_1;
 	}
 	private JPanel getPanelResumen() {
 		if (panelResumen == null) {
@@ -1845,10 +1995,39 @@ public class VentanaPrincipal extends JFrame {
 		Map<String, Articulo> articulos = organizacionFiestas.getArticulos();
 		PanelArticuloCatalogo panel = null;
 		for(Articulo a : articulos.values()){
-			panel = new PanelArticuloCatalogo(this, a);
-			panel.setBounds(0, 0, panelArticulosCatalogo.getWidth()/2, panelArticulosCatalogo.getHeight()/2);
-			panelArticulosCatalogo.add(panel);
+			añadirArticuloPanelCatalogo(a);
 		}
+	}
+
+	private void añadirArticuloPanelCatalogo(Articulo a) {
+		PanelArticuloCatalogo panel;
+		panel = new PanelArticuloCatalogo(this, a);
+		panelArticulosCatalogo.add(panel);
+	}
+	
+	public void filtrarArticulosCatalogo() {
+		panelArticulosCatalogo.removeAll();
+		panelArticulosCatalogo.revalidate();
+		panelArticulosCatalogo.repaint();
+		for(Articulo a : organizacionFiestas.getArticulos().values()){
+			if(a.getTipo().equals(TipoArticulo.Bebida) 
+					&& chckbxBebida.isSelected())
+				añadirArticuloPanelCatalogo(a);
+			if(a.getTipo().equals(TipoArticulo.Comida) 
+					&& chckbxComida.isSelected())
+				añadirArticuloPanelCatalogo(a);
+			if(a.getTipo().equals(TipoArticulo.Decoración) 
+					&& chckbxDecoracin.isSelected())
+				añadirArticuloPanelCatalogo(a);
+			if(a.getTipo().equals(TipoArticulo.Local) 
+					&& chckbxLocal.isSelected())
+				añadirArticuloPanelCatalogo(a);
+			if(a.getTipo().equals(TipoArticulo.Otros) 
+					&& chckbxOtros.isSelected())
+				añadirArticuloPanelCatalogo(a);
+		}
+		panelArticulosCatalogo.revalidate();
+		panelArticulosCatalogo.repaint();
 	}
 	
 	public void añadirArticuloReserva(Articulo articulo){
@@ -1868,5 +2047,28 @@ public class VentanaPrincipal extends JFrame {
 	public void eliminarArticuloCarrito(Articulo articulo) {
 		organizacionFiestas.getReserva().eliminarArticulo(articulo);		
 	}
+
+	public float obtenerSubtotalCarrito() {
+		return organizacionFiestas.getReserva().calcularImporte();
+	}
+
+	public void vaciarCarrito() {
+		organizacionFiestas.vaciarCarrito();		
+	}
 	
+	public void recuperarCarrito() {
+		organizacionFiestas.recuperarCarrito();
+	}
+	private Component getHorizontalStrut_19() {
+		if (horizontalStrut_19 == null) {
+			horizontalStrut_19 = Box.createHorizontalStrut(20);
+		}
+		return horizontalStrut_19;
+	}
+	private Component getHorizontalStrut_20() {
+		if (horizontalStrut_20 == null) {
+			horizontalStrut_20 = Box.createHorizontalStrut(20);
+		}
+		return horizontalStrut_20;
+	}
 }

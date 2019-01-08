@@ -34,9 +34,12 @@ public class GestionFicheros {
 			String descripcion = data[3];
 			float precioIndividual = Float.parseFloat(data[4]);
 			float precioGrupo = Float.parseFloat(data[5]);
+			boolean grupo = false;
+			if(precioGrupo != 0)
+				grupo = true;
 			Articulo producto = 
 					new Articulo(cod, tipo, nombre, descripcion,
-							precioIndividual, precioGrupo);
+							precioIndividual, precioGrupo, grupo);
 			productos.put(producto.getCodigo(), producto);
 		}
 		return productos;

@@ -75,6 +75,11 @@ public class DialogCarrito extends JDialog {
 	private JButton getBtnCerrar() {
 		if (btnCerrar == null) {
 			btnCerrar = new JButton("Cerrar");
+			btnCerrar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					dispose();
+				}
+			});
 		}
 		return btnCerrar;
 	}
@@ -134,6 +139,8 @@ public class DialogCarrito extends JDialog {
 			btnVaciarCarrito = new JButton("Vaciar Carrito");
 			btnVaciarCarrito.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					vp.vaciarCarrito();
+					repintarCarrito();
 				}
 			});
 			btnVaciarCarrito.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -143,6 +150,12 @@ public class DialogCarrito extends JDialog {
 	private JButton getBtnRecuperarCarrito() {
 		if (btnRecuperarCarrito == null) {
 			btnRecuperarCarrito = new JButton("Recuperar Carrito");
+			btnRecuperarCarrito.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					vp.recuperarCarrito();
+					repintarCarrito();
+				}
+			});
 			btnRecuperarCarrito.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		}
 		return btnRecuperarCarrito;
@@ -188,13 +201,21 @@ public class DialogCarrito extends JDialog {
 		List<Articulo> articulosCarrito = vp.getArticulosCarrito();
 		for (Articulo a : articulosCarrito){
 			panelContenedorArticulos.add(new PanelArticuloCarrito(this,a));
+
 		}
+		txtSubtotal.setText(String.valueOf(vp.obtenerSubtotalCarrito()));		
 	}
 
 	public void eliminarArticuloCarrito(Articulo articulo) {
 		vp.eliminarArticuloCarrito(articulo);
-		panelContenedorArticulos.removeAll();
-		rellenarCarrito();	
+		repintarCarrito();	
+	}
+
+	private void repintarCarrito() {
+		panelContenedorArticulos.removeAll();		
+		rellenarCarrito();
+		panelContenedorArticulos.revalidate();
+		panelContenedorArticulos.repaint();
 	}
 	
 	private void vaciarCarrito(){

@@ -25,6 +25,9 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.border.LineBorder;
 
 import logica.Articulo;
+import logica.tipos.TipoArticulo;
+
+import java.awt.Font;
 
 public class PanelArticuloCatalogo extends JPanel {
 	private VentanaPrincipal vp;
@@ -57,9 +60,6 @@ public class PanelArticuloCatalogo extends JPanel {
 	private JPanel panelSelector;
 	private Component horizontalStrut_2;
 	private Component horizontalStrut_3;
-	private JRadioButton rdbtnUnidades;
-	private JRadioButton rdbtnGrupo;
-	private final ButtonGroup buttonGroup = new ButtonGroup();
 
 	/**
 	 * Create the panel.
@@ -90,6 +90,10 @@ public class PanelArticuloCatalogo extends JPanel {
 		txtTipoArticulo.setText(articulo.getTipo().name());
 		textAreaDescripcion.setText(articulo.getDescripcion());
 		adaptarImagenLabel(lblImagen, articulo.getFoto());
+		if(!articulo.isGrupo()) {
+			lblUnidades.setEnabled(true);
+			spinner.setEnabled(true);
+		}
 	}
 
 	private JLabel getLblImagen() {
@@ -132,12 +136,14 @@ public class PanelArticuloCatalogo extends JPanel {
 	private JLabel getLblDenominacion() {
 		if (lblDenominacion == null) {
 			lblDenominacion = new JLabel("Denominacion: ");
+			lblDenominacion.setFont(new Font("Dialog", Font.BOLD, 10));
 		}
 		return lblDenominacion;
 	}
 	private JTextField getTxtDenominacion() {
 		if (txtDenominacion == null) {
 			txtDenominacion = new JTextField();
+			txtDenominacion.setFont(new Font("Dialog", Font.PLAIN, 10));
 			txtDenominacion.setEditable(false);
 			txtDenominacion.setColumns(10);
 		}
@@ -146,6 +152,7 @@ public class PanelArticuloCatalogo extends JPanel {
 	private JLabel getLblPrecioUnitario() {
 		if (lblPrecioUnitario == null) {
 			lblPrecioUnitario = new JLabel("Precio unitario: ");
+			lblPrecioUnitario.setFont(new Font("Dialog", Font.BOLD, 10));
 		}
 		return lblPrecioUnitario;
 	}
@@ -160,6 +167,7 @@ public class PanelArticuloCatalogo extends JPanel {
 	private JLabel getLblPrecioGrupo() {
 		if (lblPrecioGrupo == null) {
 			lblPrecioGrupo = new JLabel("Precio grupo: ");
+			lblPrecioGrupo.setFont(new Font("Dialog", Font.BOLD, 10));
 		}
 		return lblPrecioGrupo;
 	}
@@ -174,12 +182,14 @@ public class PanelArticuloCatalogo extends JPanel {
 	private JLabel getLblTipo() {
 		if (lblTipo == null) {
 			lblTipo = new JLabel("Tipo: ");
+			lblTipo.setFont(new Font("Dialog", Font.BOLD, 10));
 		}
 		return lblTipo;
 	}
 	private JTextField getTxtTipoArticulo() {
 		if (txtTipoArticulo == null) {
 			txtTipoArticulo = new JTextField();
+			txtTipoArticulo.setFont(new Font("Dialog", Font.PLAIN, 10));
 			txtTipoArticulo.setEditable(false);
 			txtTipoArticulo.setColumns(10);
 		}
@@ -204,6 +214,7 @@ public class PanelArticuloCatalogo extends JPanel {
 	private JLabel getLblUnidades() {
 		if (lblUnidades == null) {
 			lblUnidades = new JLabel("Unidades: ");
+			lblUnidades.setFont(new Font("Dialog", Font.BOLD, 10));
 			lblUnidades.setDisplayedMnemonic('U');
 			lblUnidades.setEnabled(false);
 			lblUnidades.setLabelFor(getSpinner());
@@ -215,12 +226,11 @@ public class PanelArticuloCatalogo extends JPanel {
 			btnAadir = new JButton("A\u00F1adir");
 			btnAadir.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if(rdbtnUnidades.isSelected()){
+					if(!articulo.isGrupo()){
 						articulo.setUnidades((int) spinner.getValue());
 						vp.añadirArticuloReserva(articulo);
 						spinner.setValue(1);
 					} else {
-						articulo.setGrupo(true);
 						vp.añadirArticuloReserva(articulo);
 					}
 				}
@@ -310,8 +320,6 @@ public class PanelArticuloCatalogo extends JPanel {
 		if (panelSelector == null) {
 			panelSelector = new JPanel();
 			panelSelector.setLayout(new GridLayout(0, 2, 0, 0));
-			panelSelector.add(getRdbtnUnidades());
-			panelSelector.add(getRdbtnGrupo());
 		}
 		return panelSelector;
 	}
@@ -326,32 +334,6 @@ public class PanelArticuloCatalogo extends JPanel {
 			horizontalStrut_3 = Box.createHorizontalStrut(20);
 		}
 		return horizontalStrut_3;
-	}
-	private JRadioButton getRdbtnUnidades() {
-		if (rdbtnUnidades == null) {
-			rdbtnUnidades = new JRadioButton("Unidades");
-			rdbtnUnidades.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					lblUnidades.setEnabled(true);
-					spinner.setEnabled(true);
-				}
-			});
-			buttonGroup.add(rdbtnUnidades);
-		}
-		return rdbtnUnidades;
-	}
-	private JRadioButton getRdbtnGrupo() {
-		if (rdbtnGrupo == null) {
-			rdbtnGrupo = new JRadioButton("Grupo");
-			rdbtnGrupo.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					lblUnidades.setEnabled(false);
-					spinner.setEnabled(false);
-				}
-			});
-			buttonGroup.add(rdbtnGrupo);
-		}
-		return rdbtnGrupo;
 	}
 	
 	private void adaptarImagenLabel(JLabel label, String rutaImagen) {
