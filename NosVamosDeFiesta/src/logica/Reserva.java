@@ -1,10 +1,12 @@
 package logica;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class Reserva {
 
+	private Cliente cliente;
 	private String tipoFiesta;
 	private String descripcion;
 	private int numPersonas;
@@ -15,6 +17,7 @@ public class Reserva {
 	private String observacion;
 
 	private List<Articulo> articulos;
+	private List<Articulo> articulosRecuperar;
 
 	public Reserva() { }
 
@@ -23,6 +26,26 @@ public class Reserva {
 		this.tipoFiesta = tipoFiesta;
 		this.descripcion = descripcion;
 		this.numPersonas = numPersonas;
+		articulos = new ArrayList<Articulo>();
+		articulosRecuperar = new ArrayList<Articulo>();
+	}
+	
+	public Reserva(Cliente cliente, String tipoFiesta, String descripcion, int numPersonas) {
+		super();
+		this.cliente = cliente;
+		this.tipoFiesta = tipoFiesta;
+		this.descripcion = descripcion;
+		this.numPersonas = numPersonas;
+		articulos = new ArrayList<Articulo>();
+		articulosRecuperar = new ArrayList<Articulo>();
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 
 	public String getTipoFiesta() {
@@ -95,6 +118,14 @@ public class Reserva {
 
 	public void setArticulos(List<Articulo> articulos) {
 		this.articulos = articulos;
+	}
+	
+	public List<Articulo> getArticulosRecuperar() {
+		return articulosRecuperar;
+	}
+
+	public void setArticulosRecuperar(List<Articulo> articulosRecuperar) {
+		this.articulosRecuperar = articulosRecuperar;
 	}
 
 	public float calcularImporte() {

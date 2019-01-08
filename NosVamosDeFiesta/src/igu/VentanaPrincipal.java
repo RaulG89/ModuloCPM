@@ -8,10 +8,11 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import logica.OrganizacionFiestas;
-import persistencia.GestionFicheros;
 import java.awt.CardLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.ImageIcon;
@@ -30,6 +31,10 @@ import javax.swing.SpinnerNumberModel;
 import java.awt.Dimension;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JCheckBox;
+import javax.swing.SpinnerDateModel;
+import java.util.Date;
+import java.util.Calendar;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -107,6 +112,110 @@ public class VentanaPrincipal extends JFrame {
 	private JTextField textField;
 	private Component verticalStrut_11;
 	private Component verticalStrut_12;
+	private JPanel panelLabelDescripcion;
+	private JPanel panelLabelTipoFiesta;
+	private JPanel panelLabelAsistentes;
+	private Component horizontalStrut;
+	private JPanel panelCatalogo;
+	private JPanel panelSuperiorCatalogo;
+	private JPanel panelInferiorCatalogo;
+	private JPanel panelCentralCatalogo;
+	private Component horizontalStrut_1;
+	private JPanel panelFiltradoCatalogo;
+	private JScrollPane scrollPaneArticulosCatalogo;
+	private JPanel panelArticulosCatalogo;
+	private JButton btnAyudaCatalogo;
+	private Component horizontalStrut_2;
+	private JLabel lblNombreClienteCatalogo;
+	private JButton btnCarrito;
+	private JCheckBox chckbxBebida;
+	private JCheckBox chckbxComida;
+	private JCheckBox chckbxDecoracin;
+	private JCheckBox chckbxLocal;
+	private JCheckBox chckbxOtros;
+	private JButton btnAtrasCatalogo;
+	private JButton btnSiguienteCatalogo;
+	private JButton btnCancelarCatalogo;
+	private JPanel panelContenedorArticulos;
+	private Component horizontalStrut_3;
+	private Component horizontalStrut_4;
+	private JPanel panelFormalizacion;
+	private JPanel panelSuperiorFormalizacion;
+	private JPanel panelInferiorFormalizacion;
+	private JPanel panelCentralFormalizacion;
+	private JButton button;
+	private Component horizontalStrut_5;
+	private Component horizontalStrut_7;
+	private JPanel panelDatosFormalizacion;
+	private JLabel lblFormalizaTuFiesta;
+	private JPanel panelTituloFormalizacion;
+	private JButton btnAtrasFormalizacion;
+	private JButton btnSiguienteFormalizacion;
+	private JButton btnCancelarFormalizacion;
+	private JLabel lblNombreClienteFormalizacion;
+	private JPanel panelMensaje;
+	private JLabel lblMensaje;
+	private JPanel panelDatos;
+	private JPanel panelDatos1;
+	private JPanel panelDatos2;
+	private Component horizontalStrut_6;
+	private Component horizontalStrut_8;
+	private Component horizontalStrut_9;
+	private Component horizontalStrut_10;
+	private JPanel panelDatosPersonales;
+	private JPanel panelDatosFiesta;
+	private JPanel panelNombre;
+	private JPanel panelApellidos;
+	private JPanel panelNif;
+	private Component verticalStrut_10;
+	private Component verticalStrut_13;
+	private JLabel lblNombreFormalizacion;
+	private JTextField txtNombreFormalizacion;
+	private JLabel lblApellidosFormalizacion;
+	private JTextField txtApellidosFormalizacion;
+	private JLabel lblNif;
+	private JTextField txtNif;
+	private Component verticalStrut_14;
+	private JPanel panelFecha;
+	private JLabel lblFecha;
+	private JPanel panelHora;
+	private JLabel lblHora;
+	private JTextField txtHora;
+	private JPanel panelObservaciones;
+	private JLabel lblObservaciones;
+	private JTextField txtObservaciones;
+	private Component verticalStrut_15;
+	private JSpinner spinner_1;
+	private JPanel panelResumen;
+	private JPanel panelSuperiorResumen;
+	private JPanel panelInferiorResumen;
+	private JPanel panelCentralResumen;
+	private JButton button_1;
+	private Component horizontalStrut_11;
+	private Component horizontalStrut_12;
+	private Component horizontalStrut_13;
+	private JButton btnAtrasResumen;
+	private JButton btnSiguienteResumen;
+	private JButton btnCancelarResumen;
+	private JPanel panelDatosResumen;
+	private JLabel lblResumenDeLa;
+	private JPanel panelTituloResumen;
+	private JScrollPane scrollPaneResumen;
+	private JTextArea textAreaResumen;
+	private Component horizontalStrut_14;
+	private Component horizontalStrut_15;
+	private JPanel panelCompletado;
+	private JPanel panelSuperiorCompletado;
+	private JPanel panelCentralCompletado;
+	private JPanel panelInferiorCompletado;
+	private JButton btnNewButton_1;
+	private Component horizontalStrut_16;
+	private Component horizontalStrut_17;
+	private Component horizontalStrut_18;
+	private JButton btnFinalizar;
+	private JLabel lblTituloCompletado;
+	private JPanel panelTituloCompletado;
+	private JLabel lblImagenCompletado;
 	
 
 	/**
@@ -149,6 +258,10 @@ public class VentanaPrincipal extends JFrame {
 			panelContenedor.add(getPanelBienvenida(), "name_392626165650801");
 			panelContenedor.add(getPanelInicio(), "name_393999272847387");
 			panelContenedor.add(getPanelConfiguracionFiesta(), "name_18654399956158");
+			panelContenedor.add(getPanelCatalogo(), "name_433690722399634");
+			panelContenedor.add(getPanelFormalizacion(), "name_442786314426274");
+			panelContenedor.add(getPanelResumen(), "name_445967455209251");
+			panelContenedor.add(getPanelCompletado(), "name_446888496605853");
 		}
 		return panelContenedor;
 	}
@@ -175,10 +288,10 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnComenzar() {
 		if (btnComenzar == null) {
 			btnComenzar = new JButton("COMENZAR");
+			btnComenzar.setMnemonic('C');
 			btnComenzar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					panelBienvenida.setVisible(false);
-					panelInicio.setVisible(true);
+					cambiarPanel(false, true, false, false, false, false, false);
 				}
 			});
 			btnComenzar.setBackground(new Color(255, 204, 51));
@@ -239,6 +352,12 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnIdentificate() {
 		if (btnIdentificate == null) {
 			btnIdentificate = new JButton("Identif\u00EDcate");
+			btnIdentificate.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if(identificarCliente())
+					cambiarPanel(false, false, true, false, false, false, false);
+				}
+			});
 			btnIdentificate.setMnemonic('D');
 			btnIdentificate.setFont(new Font("Dialog", Font.BOLD, 18));
 		}
@@ -257,10 +376,7 @@ public class VentanaPrincipal extends JFrame {
 			btnSinRegistro = new JButton("Continuar sin registro");
 			btnSinRegistro.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					
-					panelInicio.setVisible(false);
-					panelConfiguracionFiesta.setVisible(true);
-					
+					cambiarPanel(false, false, true, false, false, false, false);
 				}
 			});
 			btnSinRegistro.setMnemonic('S');
@@ -309,8 +425,7 @@ public class VentanaPrincipal extends JFrame {
 			btnAtrasInicio.setFont(new Font("Dialog", Font.BOLD, 18));
 			btnAtrasInicio.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					panelInicio.setVisible(false);
-					panelBienvenida.setVisible(true);					
+					cambiarPanel(true, false, false, false, false, false, false);					
 				}
 			});
 		}
@@ -388,8 +503,8 @@ public class VentanaPrincipal extends JFrame {
 			panelNombreRegistro = new JPanel();
 			panelNombreRegistro.setLayout(new GridLayout(0, 1, 0, 0));
 			panelNombreRegistro.add(getVerticalStrut());
-			panelNombreRegistro.add(getPanel_3());
 			panelNombreRegistro.add(getVerticalStrut_1());
+			panelNombreRegistro.add(getPanel_3());
 		}
 		return panelNombreRegistro;
 	}
@@ -457,8 +572,8 @@ public class VentanaPrincipal extends JFrame {
 			panelNombreIdentificacion = new JPanel();
 			panelNombreIdentificacion.setLayout(new GridLayout(0, 1, 0, 0));
 			panelNombreIdentificacion.add(getVerticalStrut_4());
-			panelNombreIdentificacion.add(getPanel_8());
 			panelNombreIdentificacion.add(getVerticalStrut_5());
+			panelNombreIdentificacion.add(getPanel_8());
 		}
 		return panelNombreIdentificacion;
 	}
@@ -535,8 +650,9 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel getPanelSuperiorConfiguracion() {
 		if (panelSuperiorConfiguracion == null) {
 			panelSuperiorConfiguracion = new JPanel();
-			panelSuperiorConfiguracion.setLayout(new GridLayout(1, 0, 0, 0));
+			panelSuperiorConfiguracion.setLayout(new GridLayout(0, 3, 0, 0));
 			panelSuperiorConfiguracion.add(getBtnAyudaConfiguracion());
+			panelSuperiorConfiguracion.add(getHorizontalStrut_1());
 			panelSuperiorConfiguracion.add(getLblNombreClienteConfiguracion());
 		}
 		return panelSuperiorConfiguracion;
@@ -547,6 +663,7 @@ public class VentanaPrincipal extends JFrame {
 			panelCentralConfiguracion.setLayout(new BorderLayout(0, 0));
 			panelCentralConfiguracion.add(getPanelTituloConfiguracion(), BorderLayout.NORTH);
 			panelCentralConfiguracion.add(getPanelOpcionesConfiguracion(), BorderLayout.CENTER);
+			panelCentralConfiguracion.add(getHorizontalStrut(), BorderLayout.EAST);
 		}
 		return panelCentralConfiguracion;
 	}
@@ -565,12 +682,15 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnAyudaConfiguracion() {
 		if (btnAyudaConfiguracion == null) {
 			btnAyudaConfiguracion = new JButton("?");
+			btnAyudaConfiguracion.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			btnAyudaConfiguracion.setToolTipText("Ayuda");
 		}
 		return btnAyudaConfiguracion;
 	}
 	private JLabel getLblNombreClienteConfiguracion() {
 		if (lblNombreClienteConfiguracion == null) {
-			lblNombreClienteConfiguracion = new JLabel("");
+			lblNombreClienteConfiguracion = new JLabel("Bienvenido");
+			lblNombreClienteConfiguracion.setFont(new Font("Tahoma", Font.PLAIN, 18));
 			lblNombreClienteConfiguracion.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		}
 		return lblNombreClienteConfiguracion;
@@ -578,10 +698,11 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnAtras() {
 		if (btnAtras == null) {
 			btnAtras = new JButton("Atras");
+			btnAtras.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			btnAtras.setMnemonic('A');
 			btnAtras.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					panelConfiguracionFiesta.setVisible(false);
-					panelInicio.setVisible(true);
+					cambiarPanel(false, true, false, false, false, false, false);
 				}
 			});
 		}
@@ -590,12 +711,27 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnCancelar() {
 		if (btnCancelar == null) {
 			btnCancelar = new JButton("Cancelar");
+			btnCancelar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					cambiarPanel(true, false, false, false, false, false, false);
+					inicializar();
+				}
+			});
+			btnCancelar.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			btnCancelar.setMnemonic('C');
 		}
 		return btnCancelar;
 	}
 	private JButton getBtnSiguiente() {
 		if (btnSiguiente == null) {
 			btnSiguiente = new JButton("Siguiente");
+			btnSiguiente.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					cambiarPanel(false, false, false, true, false, false, false);
+				}
+			});
+			btnSiguiente.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			btnSiguiente.setMnemonic('S');
 		}
 		return btnSiguiente;
 	}
@@ -636,6 +772,7 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel getLblNmeroDeAsistentes() {
 		if (lblNmeroDeAsistentes == null) {
 			lblNmeroDeAsistentes = new JLabel("N\u00FAmero de asistentes: ");
+			lblNmeroDeAsistentes.setDisplayedMnemonic('N');
 			lblNmeroDeAsistentes.setLabelFor(getSpinner());
 			lblNmeroDeAsistentes.setFont(new Font("Dialog", Font.BOLD, 18));
 		}
@@ -671,7 +808,7 @@ public class VentanaPrincipal extends JFrame {
 		if (panelAsistentes == null) {
 			panelAsistentes = new JPanel();
 			panelAsistentes.setLayout(new GridLayout(0, 2, 0, 0));
-			panelAsistentes.add(getLblNmeroDeAsistentes());
+			panelAsistentes.add(getPanelLabelAsistentes());
 			panelAsistentes.add(getSpinner());
 		}
 		return panelAsistentes;
@@ -692,7 +829,7 @@ public class VentanaPrincipal extends JFrame {
 		if (panelDescripcion == null) {
 			panelDescripcion = new JPanel();
 			panelDescripcion.setLayout(new GridLayout(0, 2, 0, 0));
-			panelDescripcion.add(getLblDescripcin());
+			panelDescripcion.add(getPanelLabelDescripcion());
 			panelDescripcion.add(getScrollPaneDescripcionConfiguración());
 		}
 		return panelDescripcion;
@@ -700,6 +837,7 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel getLblDescripcin() {
 		if (lblDescripcin == null) {
 			lblDescripcin = new JLabel("Descripci\u00F3n: ");
+			lblDescripcin.setDisplayedMnemonic('D');
 			lblDescripcin.setFont(new Font("Dialog", Font.BOLD, 18));
 			lblDescripcin.setLabelFor(getTextAreaDescripcionConfiguracion());
 		}
@@ -724,7 +862,7 @@ public class VentanaPrincipal extends JFrame {
 		if (panelTipoFiesta == null) {
 			panelTipoFiesta = new JPanel();
 			panelTipoFiesta.setLayout(new GridLayout(0, 2, 0, 0));
-			panelTipoFiesta.add(getLblTipoDeFiesta());
+			panelTipoFiesta.add(getPanelLabelTipoFiesta());
 			panelTipoFiesta.add(getTextField());
 		}
 		return panelTipoFiesta;
@@ -732,6 +870,8 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel getLblTipoDeFiesta() {
 		if (lblTipoDeFiesta == null) {
 			lblTipoDeFiesta = new JLabel("Tipo de Fiesta: ");
+			lblTipoDeFiesta.setDisplayedMnemonic('T');
+			lblTipoDeFiesta.setLabelFor(getTextField());
 			lblTipoDeFiesta.setFont(new Font("Dialog", Font.BOLD, 18));
 		}
 		return lblTipoDeFiesta;
@@ -755,5 +895,903 @@ public class VentanaPrincipal extends JFrame {
 			verticalStrut_12 = Box.createVerticalStrut(20);
 		}
 		return verticalStrut_12;
+	}
+	private JPanel getPanelLabelDescripcion() {
+		if (panelLabelDescripcion == null) {
+			panelLabelDescripcion = new JPanel();
+			panelLabelDescripcion.add(getLblDescripcin());
+		}
+		return panelLabelDescripcion;
+	}
+	private JPanel getPanelLabelTipoFiesta() {
+		if (panelLabelTipoFiesta == null) {
+			panelLabelTipoFiesta = new JPanel();
+			panelLabelTipoFiesta.add(getLblTipoDeFiesta());
+		}
+		return panelLabelTipoFiesta;
+	}
+	private JPanel getPanelLabelAsistentes() {
+		if (panelLabelAsistentes == null) {
+			panelLabelAsistentes = new JPanel();
+			panelLabelAsistentes.add(getLblNmeroDeAsistentes());
+		}
+		return panelLabelAsistentes;
+	}
+	private Component getHorizontalStrut() {
+		if (horizontalStrut == null) {
+			horizontalStrut = Box.createHorizontalStrut(20);
+		}
+		return horizontalStrut;
+	}
+	private JPanel getPanelCatalogo() {
+		if (panelCatalogo == null) {
+			panelCatalogo = new JPanel();
+			panelCatalogo.setLayout(new BorderLayout(0, 0));
+			panelCatalogo.add(getPanelSuperiorCatalogo(), BorderLayout.NORTH);
+			panelCatalogo.add(getPanelCentralCatalogo(), BorderLayout.CENTER);
+			panelCatalogo.add(getPanelInferiorCatalogo(), BorderLayout.SOUTH);
+		}
+		return panelCatalogo;
+	}
+	private JPanel getPanelSuperiorCatalogo() {
+		if (panelSuperiorCatalogo == null) {
+			panelSuperiorCatalogo = new JPanel();
+			panelSuperiorCatalogo.setLayout(new GridLayout(1, 0, 0, 0));
+			panelSuperiorCatalogo.add(getBtnAyudaCatalogo());
+			panelSuperiorCatalogo.add(getHorizontalStrut_2());
+			panelSuperiorCatalogo.add(getLblNombreClienteCatalogo());
+			panelSuperiorCatalogo.add(getBtnCarrito());
+		}
+		return panelSuperiorCatalogo;
+	}
+	private JPanel getPanelInferiorCatalogo() {
+		if (panelInferiorCatalogo == null) {
+			panelInferiorCatalogo = new JPanel();
+			FlowLayout flowLayout = (FlowLayout) panelInferiorCatalogo.getLayout();
+			flowLayout.setAlignment(FlowLayout.RIGHT);
+			panelInferiorCatalogo.add(getBtnAtrasCatalogo());
+			panelInferiorCatalogo.add(getBtnSiguienteCatalogo());
+			panelInferiorCatalogo.add(getBtnCancelarCatalogo());
+		}
+		return panelInferiorCatalogo;
+	}
+	private JPanel getPanelCentralCatalogo() {
+		if (panelCentralCatalogo == null) {
+			panelCentralCatalogo = new JPanel();
+			panelCentralCatalogo.setLayout(new BorderLayout(0, 0));
+			panelCentralCatalogo.add(getPanelFiltradoCatalogo(), BorderLayout.NORTH);
+			panelCentralCatalogo.add(getPanelContenedorArticulos(), BorderLayout.SOUTH);
+		}
+		return panelCentralCatalogo;
+	}
+	private Component getHorizontalStrut_1() {
+		if (horizontalStrut_1 == null) {
+			horizontalStrut_1 = Box.createHorizontalStrut(20);
+		}
+		return horizontalStrut_1;
+	}
+	private JPanel getPanelFiltradoCatalogo() {
+		if (panelFiltradoCatalogo == null) {
+			panelFiltradoCatalogo = new JPanel();
+			panelFiltradoCatalogo.add(getChckbxBebida());
+			panelFiltradoCatalogo.add(getChckbxComida());
+			panelFiltradoCatalogo.add(getChckbxDecoracin());
+			panelFiltradoCatalogo.add(getChckbxLocal());
+			panelFiltradoCatalogo.add(getChckbxOtros());
+		}
+		return panelFiltradoCatalogo;
+	}
+	private JScrollPane getScrollPaneArticulosCatalogo() {
+		if (scrollPaneArticulosCatalogo == null) {
+			scrollPaneArticulosCatalogo = new JScrollPane();
+			scrollPaneArticulosCatalogo.setViewportView(getPanelArticulosCatalogo());
+		}
+		return scrollPaneArticulosCatalogo;
+	}
+	private JPanel getPanelArticulosCatalogo() {
+		if (panelArticulosCatalogo == null) {
+			panelArticulosCatalogo = new JPanel();
+			panelArticulosCatalogo.setLayout(new GridLayout(0, 2, 0, 0));
+		}
+		return panelArticulosCatalogo;
+	}
+	private JButton getBtnAyudaCatalogo() {
+		if (btnAyudaCatalogo == null) {
+			btnAyudaCatalogo = new JButton("?");
+			btnAyudaCatalogo.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			btnAyudaCatalogo.setToolTipText("Ayuda");
+		}
+		return btnAyudaCatalogo;
+	}
+	private Component getHorizontalStrut_2() {
+		if (horizontalStrut_2 == null) {
+			horizontalStrut_2 = Box.createHorizontalStrut(20);
+		}
+		return horizontalStrut_2;
+	}
+	private JLabel getLblNombreClienteCatalogo() {
+		if (lblNombreClienteCatalogo == null) {
+			lblNombreClienteCatalogo = new JLabel("");
+			lblNombreClienteCatalogo.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			lblNombreClienteCatalogo.setInheritsPopupMenu(false);
+		}
+		return lblNombreClienteCatalogo;
+	}
+	private JButton getBtnCarrito() {
+		if (btnCarrito == null) {
+			btnCarrito = new JButton("Carrito");
+			btnCarrito.setMnemonic('R');
+			btnCarrito.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		}
+		return btnCarrito;
+	}
+	private JCheckBox getChckbxBebida() {
+		if (chckbxBebida == null) {
+			chckbxBebida = new JCheckBox("Bebida");
+			chckbxBebida.setMnemonic('B');
+			chckbxBebida.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		}
+		return chckbxBebida;
+	}
+	private JCheckBox getChckbxComida() {
+		if (chckbxComida == null) {
+			chckbxComida = new JCheckBox("Comida");
+			chckbxComida.setMnemonic('M');
+			chckbxComida.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		}
+		return chckbxComida;
+	}
+	private JCheckBox getChckbxDecoracin() {
+		if (chckbxDecoracin == null) {
+			chckbxDecoracin = new JCheckBox("Decoraci\u00F3n");
+			chckbxDecoracin.setMnemonic('D');
+			chckbxDecoracin.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		}
+		return chckbxDecoracin;
+	}
+	private JCheckBox getChckbxLocal() {
+		if (chckbxLocal == null) {
+			chckbxLocal = new JCheckBox("Local");
+			chckbxLocal.setMnemonic('L');
+			chckbxLocal.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		}
+		return chckbxLocal;
+	}
+	private JCheckBox getChckbxOtros() {
+		if (chckbxOtros == null) {
+			chckbxOtros = new JCheckBox("Otros");
+			chckbxOtros.setMnemonic('T');
+			chckbxOtros.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		}
+		return chckbxOtros;
+	}
+	private JButton getBtnAtrasCatalogo() {
+		if (btnAtrasCatalogo == null) {
+			btnAtrasCatalogo = new JButton("Atras");
+			btnAtrasCatalogo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					cambiarPanel(false, false, true, false, false, false, false);
+				}
+			});
+			btnAtrasCatalogo.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			btnAtrasCatalogo.setMnemonic('A');
+		}
+		return btnAtrasCatalogo;
+	}
+	private JButton getBtnSiguienteCatalogo() {
+		if (btnSiguienteCatalogo == null) {
+			btnSiguienteCatalogo = new JButton("Siguiente");
+			btnSiguienteCatalogo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					cambiarPanel(false, false, false, false, true, false, false);
+				}
+			});
+			btnSiguienteCatalogo.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			btnSiguienteCatalogo.setMnemonic('S');
+		}
+		return btnSiguienteCatalogo;
+	}
+	private JButton getBtnCancelarCatalogo() {
+		if (btnCancelarCatalogo == null) {
+			btnCancelarCatalogo = new JButton("Cancelar");
+			btnCancelarCatalogo.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			btnCancelarCatalogo.setMnemonic('C');
+		}
+		return btnCancelarCatalogo;
+	}
+	private JPanel getPanelContenedorArticulos() {
+		if (panelContenedorArticulos == null) {
+			panelContenedorArticulos = new JPanel();
+			panelContenedorArticulos.setLayout(new BorderLayout(0, 0));
+			panelContenedorArticulos.add(getHorizontalStrut_4(), BorderLayout.WEST);
+			panelContenedorArticulos.add(getScrollPaneArticulosCatalogo(), BorderLayout.NORTH);
+			panelContenedorArticulos.add(getHorizontalStrut_3(), BorderLayout.SOUTH);
+		}
+		return panelContenedorArticulos;
+	}
+	private Component getHorizontalStrut_3() {
+		if (horizontalStrut_3 == null) {
+			horizontalStrut_3 = Box.createHorizontalStrut(20);
+		}
+		return horizontalStrut_3;
+	}
+	private Component getHorizontalStrut_4() {
+		if (horizontalStrut_4 == null) {
+			horizontalStrut_4 = Box.createHorizontalStrut(20);
+		}
+		return horizontalStrut_4;
+	}
+	private JPanel getPanelFormalizacion() {
+		if (panelFormalizacion == null) {
+			panelFormalizacion = new JPanel();
+			panelFormalizacion.setLayout(new BorderLayout(0, 0));
+			panelFormalizacion.add(getPanelSuperiorFormalizacion(), BorderLayout.NORTH);
+			panelFormalizacion.add(getPanelCentralFormalizacion(), BorderLayout.CENTER);
+			panelFormalizacion.add(getPanelInferiorFormalizacion(), BorderLayout.SOUTH);
+		}
+		return panelFormalizacion;
+	}
+	private JPanel getPanelSuperiorFormalizacion() {
+		if (panelSuperiorFormalizacion == null) {
+			panelSuperiorFormalizacion = new JPanel();
+			panelSuperiorFormalizacion.setLayout(new GridLayout(1, 0, 0, 0));
+			panelSuperiorFormalizacion.add(getButton());
+			panelSuperiorFormalizacion.add(getHorizontalStrut_5());
+			panelSuperiorFormalizacion.add(getLblNombreClienteFormalizacion());
+			panelSuperiorFormalizacion.add(getHorizontalStrut_7());
+		}
+		return panelSuperiorFormalizacion;
+	}
+	private JPanel getPanelInferiorFormalizacion() {
+		if (panelInferiorFormalizacion == null) {
+			panelInferiorFormalizacion = new JPanel();
+			FlowLayout flowLayout = (FlowLayout) panelInferiorFormalizacion.getLayout();
+			flowLayout.setAlignment(FlowLayout.RIGHT);
+			panelInferiorFormalizacion.add(getBtnAtrasFormalizacion());
+			panelInferiorFormalizacion.add(getBtnSiguienteFormalizacion());
+			panelInferiorFormalizacion.add(getBtnCancelarFormalizacion());
+		}
+		return panelInferiorFormalizacion;
+	}
+	private JPanel getPanelCentralFormalizacion() {
+		if (panelCentralFormalizacion == null) {
+			panelCentralFormalizacion = new JPanel();
+			panelCentralFormalizacion.setLayout(new BorderLayout(0, 0));
+			panelCentralFormalizacion.add(getPanelTituloFormalizacion(), BorderLayout.NORTH);
+			panelCentralFormalizacion.add(getPanelDatosFormalizacion());
+		}
+		return panelCentralFormalizacion;
+	}
+	private JButton getButton() {
+		if (button == null) {
+			button = new JButton("?");
+			button.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			button.setToolTipText("Ayuda");
+		}
+		return button;
+	}
+	private Component getHorizontalStrut_5() {
+		if (horizontalStrut_5 == null) {
+			horizontalStrut_5 = Box.createHorizontalStrut(20);
+		}
+		return horizontalStrut_5;
+	}
+	private Component getHorizontalStrut_7() {
+		if (horizontalStrut_7 == null) {
+			horizontalStrut_7 = Box.createHorizontalStrut(20);
+		}
+		return horizontalStrut_7;
+	}
+	private JPanel getPanelDatosFormalizacion() {
+		if (panelDatosFormalizacion == null) {
+			panelDatosFormalizacion = new JPanel();
+			panelDatosFormalizacion.setLayout(new BorderLayout(0, 0));
+			panelDatosFormalizacion.add(getPanelMensaje(), BorderLayout.NORTH);
+			panelDatosFormalizacion.add(getPanelDatos(), BorderLayout.CENTER);
+		}
+		return panelDatosFormalizacion;
+	}
+	private JLabel getLblFormalizaTuFiesta() {
+		if (lblFormalizaTuFiesta == null) {
+			lblFormalizaTuFiesta = new JLabel("Formaliza tu Fiesta");
+			lblFormalizaTuFiesta.setFont(new Font("Tahoma", Font.PLAIN, 30));
+		}
+		return lblFormalizaTuFiesta;
+	}
+	private JPanel getPanelTituloFormalizacion() {
+		if (panelTituloFormalizacion == null) {
+			panelTituloFormalizacion = new JPanel();
+			panelTituloFormalizacion.add(getLblFormalizaTuFiesta());
+		}
+		return panelTituloFormalizacion;
+	}
+	private JButton getBtnAtrasFormalizacion() {
+		if (btnAtrasFormalizacion == null) {
+			btnAtrasFormalizacion = new JButton("Atras");
+			btnAtrasFormalizacion.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					cambiarPanel(false, false, false, true, false, false, false);
+				}
+			});
+			btnAtrasFormalizacion.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			btnAtrasFormalizacion.setMnemonic('A');
+		}
+		return btnAtrasFormalizacion;
+	}
+	private JButton getBtnSiguienteFormalizacion() {
+		if (btnSiguienteFormalizacion == null) {
+			btnSiguienteFormalizacion = new JButton("Siguiente");
+			btnSiguienteFormalizacion.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					cambiarPanel(false, false, false, false, false, true, false);
+				}
+			});
+			btnSiguienteFormalizacion.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			btnSiguienteFormalizacion.setMnemonic('S');
+		}
+		return btnSiguienteFormalizacion;
+	}
+	private JButton getBtnCancelarFormalizacion() {
+		if (btnCancelarFormalizacion == null) {
+			btnCancelarFormalizacion = new JButton("Cancelar");
+			btnCancelarFormalizacion.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			btnCancelarFormalizacion.setMnemonic('C');
+		}
+		return btnCancelarFormalizacion;
+	}
+	private JLabel getLblNombreClienteFormalizacion() {
+		if (lblNombreClienteFormalizacion == null) {
+			lblNombreClienteFormalizacion = new JLabel("");
+		}
+		return lblNombreClienteFormalizacion;
+	}
+	private JPanel getPanelMensaje() {
+		if (panelMensaje == null) {
+			panelMensaje = new JPanel();
+			panelMensaje.add(getLblMensaje());
+		}
+		return panelMensaje;
+	}
+	private JLabel getLblMensaje() {
+		if (lblMensaje == null) {
+			lblMensaje = new JLabel("\u00A1Ya falta poco! Para formalizar tu fiesta rellena los siguientes datos");
+			lblMensaje.setFont(new Font("Dialog", Font.PLAIN, 18));
+		}
+		return lblMensaje;
+	}
+	private JPanel getPanelDatos() {
+		if (panelDatos == null) {
+			panelDatos = new JPanel();
+			panelDatos.setLayout(new GridLayout(0, 2, 0, 0));
+			panelDatos.add(getPanelDatos1());
+			panelDatos.add(getPanelDatos2());
+		}
+		return panelDatos;
+	}
+	private JPanel getPanelDatos1() {
+		if (panelDatos1 == null) {
+			panelDatos1 = new JPanel();
+			panelDatos1.setLayout(new BorderLayout(0, 0));
+			panelDatos1.add(getHorizontalStrut_6_1(), BorderLayout.WEST);
+			panelDatos1.add(getHorizontalStrut_8(), BorderLayout.EAST);
+			panelDatos1.add(getPanelDatosPersonales(), BorderLayout.CENTER);
+		}
+		return panelDatos1;
+	}
+	private JPanel getPanelDatos2() {
+		if (panelDatos2 == null) {
+			panelDatos2 = new JPanel();
+			panelDatos2.setLayout(new BorderLayout(0, 0));
+			panelDatos2.add(getHorizontalStrut_9(), BorderLayout.WEST);
+			panelDatos2.add(getHorizontalStrut_10(), BorderLayout.EAST);
+			panelDatos2.add(getPanelDatosFiesta(), BorderLayout.CENTER);
+		}
+		return panelDatos2;
+	}
+	private Component getHorizontalStrut_6_1() {
+		if (horizontalStrut_6 == null) {
+			horizontalStrut_6 = Box.createHorizontalStrut(20);
+		}
+		return horizontalStrut_6;
+	}
+	private Component getHorizontalStrut_8() {
+		if (horizontalStrut_8 == null) {
+			horizontalStrut_8 = Box.createHorizontalStrut(20);
+		}
+		return horizontalStrut_8;
+	}
+	private Component getHorizontalStrut_9() {
+		if (horizontalStrut_9 == null) {
+			horizontalStrut_9 = Box.createHorizontalStrut(20);
+		}
+		return horizontalStrut_9;
+	}
+	private Component getHorizontalStrut_10() {
+		if (horizontalStrut_10 == null) {
+			horizontalStrut_10 = Box.createHorizontalStrut(20);
+		}
+		return horizontalStrut_10;
+	}
+	private JPanel getPanelDatosPersonales() {
+		if (panelDatosPersonales == null) {
+			panelDatosPersonales = new JPanel();
+			panelDatosPersonales.setLayout(new GridLayout(0, 1, 0, 5));
+			panelDatosPersonales.add(getVerticalStrut_10());
+			panelDatosPersonales.add(getPanelNombre());
+			panelDatosPersonales.add(getPanelApellidos());
+			panelDatosPersonales.add(getPanelNif());
+			panelDatosPersonales.add(getVerticalStrut_13());
+		}
+		return panelDatosPersonales;
+	}
+	private JPanel getPanelDatosFiesta() {
+		if (panelDatosFiesta == null) {
+			panelDatosFiesta = new JPanel();
+			panelDatosFiesta.setLayout(new GridLayout(0, 1, 0, 0));
+			panelDatosFiesta.add(getVerticalStrut_14());
+			panelDatosFiesta.add(getPanelFecha());
+			panelDatosFiesta.add(getPanelHora());
+			panelDatosFiesta.add(getPanelObservaciones());
+			panelDatosFiesta.add(getVerticalStrut_15());
+		}
+		return panelDatosFiesta;
+	}
+	private JPanel getPanelNombre() {
+		if (panelNombre == null) {
+			panelNombre = new JPanel();
+			panelNombre.setLayout(new GridLayout(0, 2, 0, 0));
+			panelNombre.add(getLblNombreFormalizacion());
+			panelNombre.add(getTxtNombreFormalizacion());
+		}
+		return panelNombre;
+	}
+	private JPanel getPanelApellidos() {
+		if (panelApellidos == null) {
+			panelApellidos = new JPanel();
+			panelApellidos.setLayout(new GridLayout(0, 2, 0, 0));
+			panelApellidos.add(getLblApellidosFormalizacion());
+			panelApellidos.add(getTxtApellidosFormalizacion());
+		}
+		return panelApellidos;
+	}
+	private JPanel getPanelNif() {
+		if (panelNif == null) {
+			panelNif = new JPanel();
+			panelNif.setLayout(new GridLayout(0, 2, 0, 0));
+			panelNif.add(getLblNif());
+			panelNif.add(getTxtNif());
+		}
+		return panelNif;
+	}
+	private Component getVerticalStrut_10() {
+		if (verticalStrut_10 == null) {
+			verticalStrut_10 = Box.createVerticalStrut(20);
+		}
+		return verticalStrut_10;
+	}
+	private Component getVerticalStrut_13() {
+		if (verticalStrut_13 == null) {
+			verticalStrut_13 = Box.createVerticalStrut(20);
+		}
+		return verticalStrut_13;
+	}
+	private JLabel getLblNombreFormalizacion() {
+		if (lblNombreFormalizacion == null) {
+			lblNombreFormalizacion = new JLabel("Nombre: ");
+			lblNombreFormalizacion.setFont(new Font("Dialog", Font.PLAIN, 18));
+			lblNombreFormalizacion.setDisplayedMnemonic('N');
+			lblNombreFormalizacion.setLabelFor(getTxtNombreFormalizacion());
+		}
+		return lblNombreFormalizacion;
+	}
+	private JTextField getTxtNombreFormalizacion() {
+		if (txtNombreFormalizacion == null) {
+			txtNombreFormalizacion = new JTextField();
+			txtNombreFormalizacion.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			txtNombreFormalizacion.setColumns(10);
+		}
+		return txtNombreFormalizacion;
+	}
+	private JLabel getLblApellidosFormalizacion() {
+		if (lblApellidosFormalizacion == null) {
+			lblApellidosFormalizacion = new JLabel("Apellidos:");
+			lblApellidosFormalizacion.setDisplayedMnemonic('P');
+			lblApellidosFormalizacion.setLabelFor(getTxtApellidosFormalizacion());
+			lblApellidosFormalizacion.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		}
+		return lblApellidosFormalizacion;
+	}
+	private JTextField getTxtApellidosFormalizacion() {
+		if (txtApellidosFormalizacion == null) {
+			txtApellidosFormalizacion = new JTextField();
+			txtApellidosFormalizacion.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			txtApellidosFormalizacion.setColumns(10);
+		}
+		return txtApellidosFormalizacion;
+	}
+	private JLabel getLblNif() {
+		if (lblNif == null) {
+			lblNif = new JLabel("NIF: ");
+			lblNif.setDisplayedMnemonic('F');
+			lblNif.setLabelFor(getTxtNif());
+			lblNif.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		}
+		return lblNif;
+	}
+	private JTextField getTxtNif() {
+		if (txtNif == null) {
+			txtNif = new JTextField();
+			txtNif.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			txtNif.setColumns(10);
+		}
+		return txtNif;
+	}
+	private Component getVerticalStrut_14() {
+		if (verticalStrut_14 == null) {
+			verticalStrut_14 = Box.createVerticalStrut(20);
+		}
+		return verticalStrut_14;
+	}
+	private JPanel getPanelFecha() {
+		if (panelFecha == null) {
+			panelFecha = new JPanel();
+			panelFecha.setLayout(new GridLayout(0, 2, 0, 0));
+			panelFecha.add(getLblFecha());
+			panelFecha.add(getSpinner_1());
+		}
+		return panelFecha;
+	}
+	private JLabel getLblFecha() {
+		if (lblFecha == null) {
+			lblFecha = new JLabel("Fecha: ");
+			lblFecha.setLabelFor(getSpinner_1());
+			lblFecha.setFont(new Font("Dialog", Font.PLAIN, 18));
+			lblFecha.setDisplayedMnemonic('E');
+		}
+		return lblFecha;
+	}
+	private JPanel getPanelHora() {
+		if (panelHora == null) {
+			panelHora = new JPanel();
+			panelHora.setLayout(new GridLayout(0, 2, 0, 0));
+			panelHora.add(getLblHora());
+			panelHora.add(getTxtHora());
+		}
+		return panelHora;
+	}
+	private JLabel getLblHora() {
+		if (lblHora == null) {
+			lblHora = new JLabel("Hora:");
+			lblHora.setLabelFor(getTxtHora());
+			lblHora.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			lblHora.setDisplayedMnemonic('H');
+		}
+		return lblHora;
+	}
+	private JTextField getTxtHora() {
+		if (txtHora == null) {
+			txtHora = new JTextField();
+			txtHora.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			txtHora.setColumns(10);
+		}
+		return txtHora;
+	}
+	private JPanel getPanelObservaciones() {
+		if (panelObservaciones == null) {
+			panelObservaciones = new JPanel();
+			panelObservaciones.setLayout(new GridLayout(0, 2, 0, 0));
+			panelObservaciones.add(getLblObservaciones());
+			panelObservaciones.add(getTxtObservaciones());
+		}
+		return panelObservaciones;
+	}
+	private JLabel getLblObservaciones() {
+		if (lblObservaciones == null) {
+			lblObservaciones = new JLabel("Observaciones: ");
+			lblObservaciones.setLabelFor(getTxtObservaciones());
+			lblObservaciones.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			lblObservaciones.setDisplayedMnemonic('B');
+		}
+		return lblObservaciones;
+	}
+	private JTextField getTxtObservaciones() {
+		if (txtObservaciones == null) {
+			txtObservaciones = new JTextField();
+			txtObservaciones.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			txtObservaciones.setColumns(10);
+		}
+		return txtObservaciones;
+	}
+	private Component getVerticalStrut_15() {
+		if (verticalStrut_15 == null) {
+			verticalStrut_15 = Box.createVerticalStrut(20);
+		}
+		return verticalStrut_15;
+	}
+	private JSpinner getSpinner_1() {
+		if (spinner_1 == null) {
+			spinner_1 = new JSpinner();
+			spinner_1.setModel(new SpinnerDateModel(new Date(1546988400000L), new Date(1546297200000L), null, Calendar.DAY_OF_YEAR));
+		}
+		return spinner_1;
+	}
+	private JPanel getPanelResumen() {
+		if (panelResumen == null) {
+			panelResumen = new JPanel();
+			panelResumen.setLayout(new BorderLayout(0, 0));
+			panelResumen.add(getPanelSuperiorResumen(), BorderLayout.NORTH);
+			panelResumen.add(getPanelCentralResumen(), BorderLayout.CENTER);
+			panelResumen.add(getPanelInferiorResumen(), BorderLayout.SOUTH);
+		}
+		return panelResumen;
+	}
+	private JPanel getPanelSuperiorResumen() {
+		if (panelSuperiorResumen == null) {
+			panelSuperiorResumen = new JPanel();
+			panelSuperiorResumen.setLayout(new GridLayout(1, 0, 0, 0));
+			panelSuperiorResumen.add(getButton_1());
+			panelSuperiorResumen.add(getHorizontalStrut_11());
+			panelSuperiorResumen.add(getHorizontalStrut_12());
+			panelSuperiorResumen.add(getHorizontalStrut_13());
+		}
+		return panelSuperiorResumen;
+	}
+	private JPanel getPanelInferiorResumen() {
+		if (panelInferiorResumen == null) {
+			panelInferiorResumen = new JPanel();
+			FlowLayout flowLayout = (FlowLayout) panelInferiorResumen.getLayout();
+			flowLayout.setAlignment(FlowLayout.RIGHT);
+			panelInferiorResumen.add(getBtnAtrasResumen());
+			panelInferiorResumen.add(getBtnSiguienteResumen());
+			panelInferiorResumen.add(getBtnCancelarResumen());
+		}
+		return panelInferiorResumen;
+	}
+	private JPanel getPanelCentralResumen() {
+		if (panelCentralResumen == null) {
+			panelCentralResumen = new JPanel();
+			panelCentralResumen.setLayout(new BorderLayout(0, 0));
+			panelCentralResumen.add(getPanelDatosResumen(), BorderLayout.CENTER);
+		}
+		return panelCentralResumen;
+	}
+	private JButton getButton_1() {
+		if (button_1 == null) {
+			button_1 = new JButton("?");
+			button_1.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		}
+		return button_1;
+	}
+	private Component getHorizontalStrut_11() {
+		if (horizontalStrut_11 == null) {
+			horizontalStrut_11 = Box.createHorizontalStrut(20);
+		}
+		return horizontalStrut_11;
+	}
+	private Component getHorizontalStrut_12() {
+		if (horizontalStrut_12 == null) {
+			horizontalStrut_12 = Box.createHorizontalStrut(20);
+		}
+		return horizontalStrut_12;
+	}
+	private Component getHorizontalStrut_13() {
+		if (horizontalStrut_13 == null) {
+			horizontalStrut_13 = Box.createHorizontalStrut(20);
+		}
+		return horizontalStrut_13;
+	}
+	private JButton getBtnAtrasResumen() {
+		if (btnAtrasResumen == null) {
+			btnAtrasResumen = new JButton("Atras");
+			btnAtrasResumen.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					cambiarPanel(false, false, false, false, true, false, false);
+				}
+			});
+			btnAtrasResumen.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			btnAtrasResumen.setMnemonic('A');
+		}
+		return btnAtrasResumen;
+	}
+	private JButton getBtnSiguienteResumen() {
+		if (btnSiguienteResumen == null) {
+			btnSiguienteResumen = new JButton("Siguiente");
+			btnSiguienteResumen.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					cambiarPanel(false, false, false, false, false, false, true);
+				}
+			});
+			btnSiguienteResumen.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			btnSiguienteResumen.setMnemonic('S');
+		}
+		return btnSiguienteResumen;
+	}
+	private JButton getBtnCancelarResumen() {
+		if (btnCancelarResumen == null) {
+			btnCancelarResumen = new JButton("Cancelar");
+			btnCancelarResumen.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		}
+		return btnCancelarResumen;
+	}
+	private JPanel getPanelDatosResumen() {
+		if (panelDatosResumen == null) {
+			panelDatosResumen = new JPanel();
+			panelDatosResumen.setLayout(new BorderLayout(0, 0));
+			panelDatosResumen.add(getHorizontalStrut_15(), BorderLayout.WEST);
+			panelDatosResumen.add(getPanelTituloResumen(), BorderLayout.NORTH);
+			panelDatosResumen.add(getScrollPaneResumen(), BorderLayout.CENTER);
+			panelDatosResumen.add(getHorizontalStrut_14(), BorderLayout.EAST);
+		}
+		return panelDatosResumen;
+	}
+	private JLabel getLblResumenDeLa() {
+		if (lblResumenDeLa == null) {
+			lblResumenDeLa = new JLabel("Resumen de la compra");
+			lblResumenDeLa.setFont(new Font("Tahoma", Font.PLAIN, 30));
+		}
+		return lblResumenDeLa;
+	}
+	private JPanel getPanelTituloResumen() {
+		if (panelTituloResumen == null) {
+			panelTituloResumen = new JPanel();
+			panelTituloResumen.add(getLblResumenDeLa());
+		}
+		return panelTituloResumen;
+	}
+	private JScrollPane getScrollPaneResumen() {
+		if (scrollPaneResumen == null) {
+			scrollPaneResumen = new JScrollPane();
+			scrollPaneResumen.setViewportView(getTextAreaResumen());
+		}
+		return scrollPaneResumen;
+	}
+	private JTextArea getTextAreaResumen() {
+		if (textAreaResumen == null) {
+			textAreaResumen = new JTextArea();
+			textAreaResumen.setLineWrap(true);
+			textAreaResumen.setWrapStyleWord(true);
+			textAreaResumen.setEditable(false);
+		}
+		return textAreaResumen;
+	}
+	private Component getHorizontalStrut_14() {
+		if (horizontalStrut_14 == null) {
+			horizontalStrut_14 = Box.createHorizontalStrut(20);
+		}
+		return horizontalStrut_14;
+	}
+	private Component getHorizontalStrut_15() {
+		if (horizontalStrut_15 == null) {
+			horizontalStrut_15 = Box.createHorizontalStrut(20);
+		}
+		return horizontalStrut_15;
+	}
+	private JPanel getPanelCompletado() {
+		if (panelCompletado == null) {
+			panelCompletado = new JPanel();
+			panelCompletado.setBackground(new Color(147, 112, 219));
+			panelCompletado.setLayout(new BorderLayout(0, 0));
+			panelCompletado.add(getPanelSuperiorCompletado(), BorderLayout.NORTH);
+			panelCompletado.add(getPanelCentralCompletado(), BorderLayout.CENTER);
+			panelCompletado.add(getPanelInferiorCompletado(), BorderLayout.SOUTH);
+		}
+		return panelCompletado;
+	}
+	private JPanel getPanelSuperiorCompletado() {
+		if (panelSuperiorCompletado == null) {
+			panelSuperiorCompletado = new JPanel();
+			panelSuperiorCompletado.setBackground(new Color(147, 112, 219));
+			panelSuperiorCompletado.setLayout(new GridLayout(1, 0, 0, 0));
+			panelSuperiorCompletado.add(getBtnNewButton_1());
+			panelSuperiorCompletado.add(getHorizontalStrut_16());
+			panelSuperiorCompletado.add(getHorizontalStrut_17());
+			panelSuperiorCompletado.add(getHorizontalStrut_18());
+		}
+		return panelSuperiorCompletado;
+	}
+	private JPanel getPanelCentralCompletado() {
+		if (panelCentralCompletado == null) {
+			panelCentralCompletado = new JPanel();
+			panelCentralCompletado.setBackground(new Color(147, 112, 219));
+			panelCentralCompletado.setLayout(new BorderLayout(0, 0));
+			panelCentralCompletado.add(getPanelTituloCompletado(), BorderLayout.NORTH);
+			panelCentralCompletado.add(getLblImagenCompletado(), BorderLayout.CENTER);
+		}
+		return panelCentralCompletado;
+	}
+	private JPanel getPanelInferiorCompletado() {
+		if (panelInferiorCompletado == null) {
+			panelInferiorCompletado = new JPanel();
+			panelInferiorCompletado.setBackground(new Color(147, 112, 219));
+			FlowLayout flowLayout = (FlowLayout) panelInferiorCompletado.getLayout();
+			panelInferiorCompletado.add(getBtnFinalizar());
+		}
+		return panelInferiorCompletado;
+	}
+	private JButton getBtnNewButton_1() {
+		if (btnNewButton_1 == null) {
+			btnNewButton_1 = new JButton("?");
+			btnNewButton_1.setBackground(new Color(255, 204, 51));
+			btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		}
+		return btnNewButton_1;
+	}
+	private Component getHorizontalStrut_16() {
+		if (horizontalStrut_16 == null) {
+			horizontalStrut_16 = Box.createHorizontalStrut(20);
+		}
+		return horizontalStrut_16;
+	}
+	private Component getHorizontalStrut_17() {
+		if (horizontalStrut_17 == null) {
+			horizontalStrut_17 = Box.createHorizontalStrut(20);
+		}
+		return horizontalStrut_17;
+	}
+	private Component getHorizontalStrut_18() {
+		if (horizontalStrut_18 == null) {
+			horizontalStrut_18 = Box.createHorizontalStrut(20);
+		}
+		return horizontalStrut_18;
+	}
+	private JButton getBtnFinalizar() {
+		if (btnFinalizar == null) {
+			btnFinalizar = new JButton("Finalizar");
+			btnFinalizar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					cambiarPanel(true, false, false, false, false, false, false);
+				}
+			});
+			btnFinalizar.setBackground(new Color(255, 204, 51));
+			btnFinalizar.setFont(new Font("Curlz MT", Font.PLAIN, 30));
+		}
+		return btnFinalizar;
+	}
+	private JLabel getLblTituloCompletado() {
+		if (lblTituloCompletado == null) {
+			lblTituloCompletado = new JLabel("\u00A1Genial!");
+			lblTituloCompletado.setFont(new Font("Curlz MT", Font.PLAIN, 40));
+		}
+		return lblTituloCompletado;
+	}
+	private JPanel getPanelTituloCompletado() {
+		if (panelTituloCompletado == null) {
+			panelTituloCompletado = new JPanel();
+			panelTituloCompletado.setBackground(new Color(147, 112, 219));
+			panelTituloCompletado.setForeground(Color.BLACK);
+			panelTituloCompletado.add(getLblTituloCompletado());
+		}
+		return panelTituloCompletado;
+	}
+	private JLabel getLblImagenCompletado() {
+		if (lblImagenCompletado == null) {
+			lblImagenCompletado = new JLabel("");
+			lblImagenCompletado.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/img/fiestaCompleta.jpg")));
+		}
+		return lblImagenCompletado;
+	}
+	
+	private void cambiarPanel(boolean bienvenida, boolean inicio, boolean configuracion, boolean catalogo, boolean formalizacion, boolean resumen, boolean completado){
+		panelBienvenida.setVisible(bienvenida);
+		panelInicio.setVisible(inicio);
+		panelConfiguracionFiesta.setVisible(configuracion);
+		panelCatalogo.setVisible(catalogo);
+		panelFormalizacion.setVisible(formalizacion);
+		panelResumen.setVisible(resumen);
+		panelCompletado.setVisible(completado);		
+	}
+	
+	private void inicializar(){
+		//Aquí inicializamos
+	}
+	
+	private boolean identificarCliente(){
+		if(!organizacionFiestas.identificar(
+				txtNombreIdentificacion.getText(), 
+				String.valueOf(pwIdentificacion.getPassword()))){
+			JOptionPane.showMessageDialog(this, "El usuario no existe o no es correcto.");
+			return false;
+		}
+		return true;
 	}
 }
